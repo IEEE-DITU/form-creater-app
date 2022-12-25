@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "182981659642",
+    "project_id": "ieee-custom-forms-181e4",
+    "storage_bucket": "ieee-custom-forms-181e4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:182981659642:android:ed127f5467e3cd53543243",
+        "android_client_info": {
+          "package_name": "com.example.ieee_forms"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "182981659642-oija0kdd0ns4kjv9si267cf06dvbht81.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbecEcWzlrjtj2JQdWdYskbgnd-nzRkHU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "182981659642-oija0kdd0ns4kjv9si267cf06dvbht81.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "182981659642-7v0q95815rs3nnemum7to6nlcf24tvot.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.miraclestudios.formCreaterApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
