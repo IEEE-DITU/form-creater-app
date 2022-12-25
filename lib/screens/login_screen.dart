@@ -1,18 +1,17 @@
-import 'dart:ui';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:flutter/material.dart';
-import 'package:ieee_forms/Signup.dart';
+import 'package:ieee_forms/screens/signup_screen.dart';
 
-class MySignin extends StatefulWidget {
-  const MySignin({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<MySignin> createState() => _MySigninState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _MySigninState extends State<MySignin> {
-  bool _ishidden = true;
-  bool _ischeck = false;
+class _LoginScreenState extends State<LoginScreen> {
+  bool _isHidden = true;
+  bool _isCheck = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,10 +19,10 @@ class _MySigninState extends State<MySignin> {
       body: Padding(
         padding: const EdgeInsets.all(40.0),
         child: Column(children: [
-          SizedBox(
+          const SizedBox(
             height: 100.0,
           ),
-          Container(
+          const SizedBox(
             width: 500,
             child: Text(
               'Sign in',
@@ -33,10 +32,10 @@ class _MySigninState extends State<MySignin> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20.0,
           ),
-          Container(
+          const SizedBox(
             width: 500,
             child: Text(" Don't have an account yet?",
                 style: TextStyle(
@@ -44,77 +43,78 @@ class _MySigninState extends State<MySignin> {
                   fontSize: 20,
                 )),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10.0,
           ),
-          Container(
+          SizedBox(
               width: 500,
               child: Row(
                 children: [
                   TextButton(
-                    onPressed: () {             
+                    onPressed: () {
                       Navigator.push(
                           context,
-                          MaterialPageRoute( builder: (context) => const MySignup()));
+                          MaterialPageRoute(
+                              builder: (context) => const SignupScreen()));
                     },
-                    child: Text('Register here !',
+                    child: const Text('Register here !',
                         style: TextStyle(
                             fontWeight: FontWeight.w800, fontSize: 20)),
                   )
                 ],
               )),
-          SizedBox(
+          const SizedBox(
             height: 30.0,
           ),
           TextFormField(
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
                 prefixIcon: Icon(Icons.email_outlined),
                 hintText: " Enter your email address",
                 labelText: "Email"),
           ),
-          SizedBox(
+          const SizedBox(
             height: 30.0,
           ),
           TextFormField(
-            obscureText: _ishidden,
+            obscureText: _isHidden,
             decoration: InputDecoration(
-                prefixIcon: Icon(Icons.lock),
+                prefixIcon: const Icon(Icons.lock),
                 suffixIcon: InkWell(
                   onTap: _togglePasswordView,
                   child:
-                      Icon(_ishidden ? Icons.visibility : Icons.visibility_off),
+                      Icon(_isHidden ? Icons.visibility : Icons.visibility_off),
                 ),
                 hintText: " Enter your Password",
                 labelText: "Password"),
           ),
-          SizedBox(
+          const SizedBox(
             height: 1.0,
           ),
           Row(
             children: [
               Checkbox(
-                  value: _ischeck,
+                  value: _isCheck,
                   onChanged: (val) {
                     setState(() {
-                      _ischeck = val!;
+                      _isCheck = val!;
                     });
                   }),
-              Text(
+              const Text(
                 "Remember me",
                 style: TextStyle(fontSize: 13),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 40.0,
               ),
               TextButton(
                   onPressed: (() {}),
-                  child: Text(
+                  child: const Text(
                     'forgot pasword?',
                     style: TextStyle(color: Colors.black54),
                   ))
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 50.0,
           ),
           SizedBox(
@@ -125,19 +125,19 @@ class _MySigninState extends State<MySignin> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50)),
                 ),
-                child: Text('Login'),
+                child: const Text('Login'),
                 onPressed: () {
-                  print('Login');
+                  debugPrint('Login');
                 }),
           ),
-          SizedBox(
+          const SizedBox(
             height: 40.0,
           ),
           Text(
             "or continue with",
             style: TextStyle(color: Colors.grey.shade400),
           ),
-          SizedBox(
+          const SizedBox(
             height: 30.0,
           ),
           Padding(
@@ -147,18 +147,18 @@ class _MySigninState extends State<MySignin> {
                 SignInButton(
                   Buttons.Facebook,
                   mini: true,
-                  shape: CircleBorder(side: BorderSide.none),
+                  shape: const CircleBorder(side: BorderSide.none),
                   onPressed: () {},
                 ),
                 SignInButton(
                   Buttons.Apple,
-                  shape: CircleBorder(side: BorderSide.none),
+                  shape: const CircleBorder(side: BorderSide.none),
                   mini: true,
                   onPressed: () {},
                 ),
                 SignInButton(
                   Buttons.GitHub,
-                  shape: CircleBorder(side: BorderSide.none),
+                  shape: const CircleBorder(side: BorderSide.none),
                   mini: true,
                   onPressed: () {},
                 ),
@@ -172,7 +172,7 @@ class _MySigninState extends State<MySignin> {
 
   void _togglePasswordView() {
     setState(() {
-      _ishidden = !_ishidden;
+      _isHidden = !_isHidden;
     });
   }
 }
