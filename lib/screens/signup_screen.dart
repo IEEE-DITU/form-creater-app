@@ -31,8 +31,8 @@ class _SignupScreenState extends State<SignupScreen> {
               const Text(
                 'Sign up',
                 style: TextStyle(
-                  fontSize: 50,
-                  fontWeight: FontWeight.w500,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(
@@ -41,7 +41,7 @@ class _SignupScreenState extends State<SignupScreen> {
               const Text('Already have an account with us?',
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 20,
+                    fontSize: 16,
                   )),
               const SizedBox(
                 height: 5,
@@ -52,14 +52,14 @@ class _SignupScreenState extends State<SignupScreen> {
                       const TextSpan(
                         text: 'Skip to ',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 16,
                           color: Colors.black
                         )
                       ),
                       TextSpan(
                         text: 'Login !',
                         style: const TextStyle(
-                          fontSize: 20,
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: Colors.red
                         ),

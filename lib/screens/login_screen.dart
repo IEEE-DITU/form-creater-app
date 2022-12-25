@@ -32,8 +32,8 @@ class _LoginScreenState extends State<LoginScreen> {
               const Text(
                 'Sign in',
                 style: TextStyle(
-                  fontSize: 50,
-                  fontWeight: FontWeight.w500,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(
@@ -42,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const Text("Don't have an account yet?",
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 20,
+                    fontSize: 16,
                   )),
               const SizedBox(
                 height: 5.0,
@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 text: 'Register Here !',
                 style: const TextStyle(
                   color: Colors.red,
-                  fontSize: 20,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold
                 ),
                 recognizer: TapGestureRecognizer()
