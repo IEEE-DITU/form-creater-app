@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:ieee_forms/Signin.dart';
-import 'package:ieee_forms/Signup.dart';
+import '../screens/signup_screen.dart';
+
 void main() {
-  runApp( const Loginpage());
+  runApp(const MyApp());
 }
-class  Loginpage extends StatelessWidget {
-  const Loginpage({super.key});
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'MY LOGIN PAGE',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.red,
-        ),
-        routes: {
-           "/":(context) => const MySignup(),
-        }
-        );
+      theme: ThemeData(
+        primarySwatch: Colors.red
+      ),
+      debugShowCheckedModeBanner: false,
+      home: const SignupScreen(),
+    );
   }
 }
