@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ieee_forms/screens/loading_screen.dart';
 import '../screens/signup_screen.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.red
       ),
       debugShowCheckedModeBanner: false,
-      home: const SignupScreen(),
+      home: const LoadingScreen(),
     );
   }
 }
