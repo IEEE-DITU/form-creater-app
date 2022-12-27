@@ -2,6 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ieee_forms/screens/loading_screen.dart';
 import 'package:ieee_forms/screens/signup_screen.dart';
 import 'package:ieee_forms/services/firebase_service.dart';
@@ -147,6 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             )
                           : const Text('Login'),
                       onPressed: () async {
+                        SystemChannels.textInput.invokeMethod('TextInput.hide');
                         if (!isProcessing) {
                           setState(() {
                             isProcessing = true;

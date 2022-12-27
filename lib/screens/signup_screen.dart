@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ieee_forms/screens/loading_screen.dart';
 import 'package:ieee_forms/services/firebase_service.dart';
 import 'package:ieee_forms/widgets/snack_bar.dart';
@@ -169,6 +170,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             )
                           : const Text('Register'),
                       onPressed: () async {
+                        SystemChannels.textInput.invokeMethod('TextInput.hide');
                         if (!isProcessing) {
                           setState(() {
                             isProcessing = true;
