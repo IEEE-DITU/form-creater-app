@@ -1,8 +1,10 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ieee_forms/screens/loading_screen.dart';
 import 'package:ieee_forms/services/firebase_service.dart';
+import 'package:ieee_forms/widgets/snack_bar.dart';
 
 import 'login_screen.dart';
 
@@ -21,6 +23,7 @@ class _SignupScreenState extends State<SignupScreen> {
   String _password = "";
   String _confirmPassword = "";
   FirebaseService fire = FirebaseService();
+  bool isProcessing = false;
 
   @override
   Widget build(BuildContext context) {
@@ -161,27 +164,39 @@ class _SignupScreenState extends State<SignupScreen> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(50)),
                           minimumSize: const Size.fromHeight(50)),
-                      child: const Text('Register'),
+                      child: (isProcessing)
+                          ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                          : const Text('Register'),
                       onPressed: () async {
-                        debugPrint('Register');
-                        if (_formKey.currentState!.validate()) {
-                          bool isSuccess = await fire.signupNewUser(
-                              _email, _password, _username);
-                          if (isSuccess) {
-                            // ignore: use_build_context_synchronously
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const LoadingScreen()),
-                              (Route<dynamic> route) => false,
-                            );
-                          } else {
-                            // ignore: use_build_context_synchronously
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text('Signup Unsuccessful'),
-                            ));
+                        SystemChannels.textInput.invokeMethod('TextInput.hide');
+                        if (!isProcessing) {
+                          setState(() {
+                            isProcessing = true;
+                          });
+                          debugPrint('Register');
+                          if (_formKey.currentState!.validate()) {
+                            bool isSuccess = await fire.signupNewUser(
+                                _email, _password, _username);
+                            if (isSuccess) {
+                              // ignore: use_build_context_synchronously
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const LoadingScreen()),
+                                (Route<dynamic> route) => false,
+                              );
+                            } else {
+                              // ignore: use_build_context_synchronously
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBarSignupUnsuccessful);
+                            }
                           }
+                          setState(() {
+                            isProcessing = false;
+                          });
                         }
                       })
                 ]),
