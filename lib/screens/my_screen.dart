@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ieee_forms/services/user.dart';
 
 import 'login_screen.dart';
 
@@ -15,7 +16,7 @@ class ProfileScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(user.email!),
+          Text(MyUser.currentUser.email),
           ElevatedButton(
               style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
@@ -27,7 +28,7 @@ class ProfileScreen extends StatelessWidget {
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const LoginScreen()),
-                      (Route<dynamic> route) => false,
+                  (Route<dynamic> route) => false,
                 );
               })
         ],

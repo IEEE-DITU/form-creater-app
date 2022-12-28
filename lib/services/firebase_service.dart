@@ -1,15 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:ieee_forms/services/user.dart';
+import 'package:uuid/uuid.dart';
 
 class FirebaseService {
+  Uuid uuid = const Uuid();
+
   Future<bool> signupNewUser(
       String email, String password, String username) async {
     try {
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
       debugPrint(FirebaseAuth.instance.currentUser!.uid.toString());
-      FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).set({
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .set({
         'email': email,
         'name': username,
         'forms': [],
@@ -31,5 +38,23 @@ class FirebaseService {
       return false;
     }
     return true;
+  }
+
+  Future<void> createNewForm(String formTitle) async {
+    String formUuid = uuid.v4();
+    FirebaseFirestore.instance.collection('forms').doc(formUuid).set({
+      'acceptingResponses': true,
+      'createdAt': 'current Date and Time',
+      'createrId': MyUser.currentUser.uid,
+      'id': formUuid,
+      'questions': [],
+      'title': formTitle
+    });
+
+    MyUser.currentUser.forms.add(formUuid);
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(MyUser.currentUser.uid)
+        .update({'forms': MyUser.currentUser.forms});
   }
 }

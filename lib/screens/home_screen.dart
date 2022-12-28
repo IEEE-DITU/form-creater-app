@@ -1,10 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ieee_forms/services/user.dart';
 
-import 'login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({Key? key}) : super(key: key);
 
 
   @override
@@ -14,6 +13,18 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('My forms'),
+      ),
+      body: Center(
+        child: ListView.builder(
+          itemCount: MyUser.currentUser.forms.length,
+            itemBuilder: (context, index) {
+
+            return Center(child: Text('$index'));
+            }),
+      ),
+    );
   }
 }
