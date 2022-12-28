@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:ieee_forms/screens/home_screen.dart';
 import 'package:ieee_forms/screens/nav_bar_screen.dart';
 
 import 'login_screen.dart';

@@ -21,7 +21,6 @@ class LoadingScreen extends StatelessWidget {
               child: Text('wrong'),
             );
           } else if (snapshot.hasData) {
-            debugPrint("LoadingScreen");
             return const EmailVerifyScreen();
           } else {
             return const LoginScreen();
