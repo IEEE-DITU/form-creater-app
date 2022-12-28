@@ -21,7 +21,7 @@ class MyUser {
         currentUser.uid = doc['uid'];
         currentUser.email = doc['email'];
         currentUser.forms = doc['forms'];
-        debugPrint(currentUser.forms.length.toString());
+        // debugPrint(currentUser.forms.length.toString());
       }
     });
   }
