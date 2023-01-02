@@ -39,11 +39,61 @@ class _NewFormScreenState extends State<NewFormScreen> {
                     minimumSize: const Size.fromHeight(50)),
                 child: const Text('Add New Form'),
                 onPressed: () async {
-                  await fire.createNewForm(formTitle);
+                  await fire.createNewForm(formTitle, getCurrentDate());
                 })
           ],
         ),
       ),
     );
+  }
+
+  String getCurrentDate() {
+    int date = DateTime.now().day;
+    int month = DateTime.now().month;
+    int year = DateTime.now().year;
+    int hour = DateTime.now().hour;
+    int min = DateTime.now().minute;
+    int second = DateTime.now().second;
+    String mon = "";
+    switch (month) {
+      case 1:
+        mon = "Jan";
+        break;
+      case 2:
+        mon = "Feb";
+        break;
+      case 3:
+        mon = "Mar";
+        break;
+      case 4:
+        mon = "Apr";
+        break;
+      case 5:
+        mon = "May";
+        break;
+      case 6:
+        mon = "Jun";
+        break;
+      case 7:
+        mon = "Jul";
+        break;
+      case 8:
+        mon = "Aug";
+        break;
+      case 9:
+        mon = "Sep";
+        break;
+      case 10:
+        mon = "Oct";
+        break;
+      case 11:
+        mon = "Nov";
+        break;
+      case 12:
+        mon = "Dec";
+        break;
+    }
+    String timeStamp = '$date $mon $year $hour:$min:$second';
+    return (timeStamp);
   }
 }

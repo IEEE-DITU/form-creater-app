@@ -40,11 +40,11 @@ class FirebaseService {
     return true;
   }
 
-  Future<void> createNewForm(String formTitle) async {
+  Future<void> createNewForm(String formTitle, String timeStamp) async {
     String formUuid = uuid.v4();
     FirebaseFirestore.instance.collection('forms').doc(formUuid).set({
       'acceptingResponses': true,
-      'createdAt': 'current Date and Time',
+      'createdAt': timeStamp,
       'createrId': MyUser.currentUser.uid,
       'id': formUuid,
       'questions': [],
