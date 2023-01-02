@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ieee_forms/services/form_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -19,37 +20,43 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('My forms'),
       ),
-      body: Center(
-        child: ListView.builder(
-            itemCount: MyUser.currentUser.forms.length,
-            itemBuilder: (context, index) {
-              formId = MyUser.currentUser.forms[index];
-              return FutureBuilder(
-                future: getFormData(formId),
-                  builder: (context, snapshot) {
-                  if(snapshot.connectionState == ConnectionState.waiting) {
-                    debugPrint("Waiting");
-                    return const CircularProgressIndicator();
-                  }
-                  if(snapshot.connectionState == ConnectionState.done) {
-                    debugPrint("Hell");
-                    return Container(
-                      margin: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(),
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: const [
-                            BoxShadow(color: Colors.black, blurRadius: 10)
-                          ]),
-                      child: Column(
-                        children: [Text(snapshot.data!.formTitle), Text(snapshot.data!.formId)],
-                      ),
-                    );
-                  }
-                  return const SizedBox(height: 10,);
+      body: FutureBuilder(
+        future: MyUser.getCurrentUser(),
+        builder: (context, snapshot) {
+          if(snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          }
+          else {
+            return ListView.builder(
+              itemCount: MyUser.currentUser.forms.length,
+              itemBuilder: (context, index) {
+                formId = MyUser.currentUser.forms[index];
+                return FutureBuilder(
+                  future: getFormData(formId),
+                    builder: (context, snapshot) {
+                    if(snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    }
+                    if(snapshot.connectionState == ConnectionState.done) {
+                      return Container(
+                        margin: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(),
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: const [
+                              BoxShadow(color: Colors.black, blurRadius: 10)
+                            ]),
+                        child: Column(
+                          children: [Text(snapshot.data!.formTitle), Text(snapshot.data!.formId)],
+                        ),
+                      );
+                    }
+                    return const SizedBox(height: 10,);
+                });
               });
-            }),
+          }
+        }
       ),
     );
   }

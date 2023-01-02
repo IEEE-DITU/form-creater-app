@@ -50,23 +50,23 @@ class ProfileScreen extends StatelessWidget {
                           )),
                     ),
                   ]),
-                  const Align(
+                  Align(
                       alignment: Alignment.bottomLeft,
                       child: Text(
-                        "Name:Amisha Tandon",
-                        style: TextStyle(fontSize: 20),
+                        "Name: ${MyUser.currentUser.name}",
+                        style: const TextStyle(fontSize: 20),
                       )),
-                  const Align(
+                  Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        "Email Id:abcd@gmail.com",
-                        style: TextStyle(fontSize: 20),
+                        "Email Id: ${MyUser.currentUser.email}",
+                        style: const TextStyle(fontSize: 20),
                       )),
-                  const Align(
+                  Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        "Forms Created:23",
-                        style: TextStyle(fontSize: 20),
+                        "Forms Created: ${MyUser.currentUser.forms.length}",
+                        style: const TextStyle(fontSize: 20),
                       )),
                   Align(
                       alignment: Alignment.bottomRight,

@@ -40,7 +40,7 @@ class FirebaseService {
     return true;
   }
 
-  Future<void> createNewForm(String formTitle, String timeStamp) async {
+  Future<String> createNewForm(String formTitle, String timeStamp) async {
     String formUuid = uuid.v4();
     FirebaseFirestore.instance.collection('forms').doc(formUuid).set({
       'acceptingResponses': true,
@@ -56,5 +56,6 @@ class FirebaseService {
         .collection('users')
         .doc(MyUser.currentUser.uid)
         .update({'forms': MyUser.currentUser.forms});
+  return formUuid;
   }
 }
