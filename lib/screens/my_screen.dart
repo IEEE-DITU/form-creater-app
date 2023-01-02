@@ -12,10 +12,18 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.blueAccent[50],
-        body: Center(
+
+        body: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('Assets/Background.png'),
+                  fit: BoxFit.cover
+            )
+          ),
           child: Container(
-              padding: const EdgeInsetsDirectional.all(7.0),
+              padding: const EdgeInsets.all(16.0),
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+              color: Colors.white,
               child: Column(
                 children: [
                   Stack(children: [
@@ -24,8 +32,8 @@ class ProfileScreen extends StatelessWidget {
                       height: 250,
                       child: ClipRRect(
                           borderRadius: BorderRadius.circular(100),
-                          child: Image(
-                            image: AssetImage("assets/avatar 2.png"),
+                          child: const Image(
+                            image: AssetImage("Assets/Avatar_img.png"),
                           )),
                     ),
                     Positioned(
@@ -63,7 +71,7 @@ class ProfileScreen extends StatelessWidget {
                   Align(
                       alignment: Alignment.bottomRight,
                       child: TextButton(
-                        child: Text(
+                        child: const Text(
                           "report a problem?",
                         ),
                         onPressed: () {},
@@ -91,9 +99,9 @@ class ProfileScreen extends StatelessWidget {
                             height: 250,
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(0),
-                                child: Image(
+                                child: const Image(
                                   image: AssetImage(
-                                      "assets/Allura Giant Phone.png"),
+                                      "Assets/Profile_footer.png"),
                                 )))),
                   ),
                 ],
