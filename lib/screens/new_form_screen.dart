@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ieee_forms/screens/form_screen.dart';
 import 'package:ieee_forms/services/firebase_service.dart';
 
 class NewFormScreen extends StatefulWidget {
@@ -39,7 +40,11 @@ class _NewFormScreenState extends State<NewFormScreen> {
                     minimumSize: const Size.fromHeight(50)),
                 child: const Text('Add New Form'),
                 onPressed: () async {
-                  await fire.createNewForm(formTitle, getCurrentDate());
+                  String formID = await fire.createNewForm(formTitle, getCurrentDate());
+                  //ignore:use_build_context_synchronously
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context) =>
+                      FormScreen(formId: formID)));
                 })
           ],
         ),

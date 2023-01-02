@@ -12,6 +12,17 @@ var snackBarLoginFailed = SnackBar(
   ),
 );
 
+var snackBarInternetError = SnackBar(
+  elevation: 0,
+  behavior: SnackBarBehavior.floating,
+  backgroundColor: Colors.transparent,
+  content: AwesomeSnackbarContent(
+    title: 'Error !! ',
+    message: 'Network Error',
+    contentType: ContentType.failure,
+  ),
+);
+
 var snackBarInvalidCredentials = SnackBar(
   elevation: 0,
   behavior: SnackBarBehavior.floating,

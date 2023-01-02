@@ -178,7 +178,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                 // ignore: use_build_context_synchronously
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(snackBarLoginFailed);
+                              } else if (e.code == 'network-request-failed') {
+                                // ignore: use_build_context_synchronously
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBarInternetError);
                               }
+
                             }
                           } else {
                             ScaffoldMessenger.of(context)
