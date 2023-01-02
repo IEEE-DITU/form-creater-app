@@ -1,16 +1,18 @@
+import 'package:ieee_forms/services/form_data.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:ieee_forms/services/user.dart';
 
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
-
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String formTitle = "";
+  String formId = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,12 +21,60 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Center(
         child: ListView.builder(
-          itemCount: MyUser.currentUser.forms.length,
+            itemCount: MyUser.currentUser.forms.length,
             itemBuilder: (context, index) {
-
-            return Center(child: Text('$index'));
+              formId = MyUser.currentUser.forms[index];
+              return FutureBuilder(
+                future: getFormData(formId),
+                  builder: (context, snapshot) {
+                  if(snapshot.connectionState == ConnectionState.waiting) {
+                    debugPrint("Waiting");
+                    return const CircularProgressIndicator();
+                  }
+                  if(snapshot.connectionState == ConnectionState.done) {
+                    debugPrint("Hell");
+                    return Container(
+                      margin: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(),
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: const [
+                            BoxShadow(color: Colors.black, blurRadius: 10)
+                          ]),
+                      child: Column(
+                        children: [Text(snapshot.data!.formTitle), Text(snapshot.data!.formId)],
+                      ),
+                    );
+                  }
+                  return const SizedBox(height: 10,);
+              });
             }),
       ),
     );
+  }
+
+  Future<FormData> getFormData(String formID) async {
+    String formTitle = "";
+    String createdAt = "";
+    bool accRes = false;
+    await FirebaseFirestore.instance
+        .collection('forms')
+        .doc(formID)
+        .get()
+        .then((DocumentSnapshot doc) {
+      formTitle = doc['title'];
+      createdAt = doc['createdAt'];
+      accRes = doc['acceptingResponses'];
+    });
+
+    FormData form = FormData(
+        formTitle: formTitle,
+        formId: formID,
+        createdAt: createdAt,
+        acceptingResponses: accRes);
+
+    debugPrint("Finish");
+    return form;
   }
 }
