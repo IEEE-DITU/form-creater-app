@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:ieee_forms/screens/home_screen.dart';
-import 'package:ieee_forms/screens/nav_bar_screen.dart';
+import 'package:ieee_forms/navigation/home_screen.dart';
+import 'package:ieee_forms/navigation/nav_bar_screen.dart';
 import 'package:ieee_forms/services/firebase_service.dart';
 
 class FormScreen extends StatefulWidget {
@@ -35,18 +35,21 @@ class _FormScreenState extends State<FormScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [Text(snapshot.data!.formTitle),
-                      TextButton(onPressed: () async {
-                        await fire.deleteForm(widget.formId);
-                        // ignore: use_build_context_synchronously
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                              const NavBarScreen()),
+                    children: [
+                      Text(snapshot.data!.formTitle),
+                      TextButton(
+                          onPressed: () async {
+                            await fire.deleteForm(widget.formId);
+                            // ignore: use_build_context_synchronously
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const NavBarScreen()),
                               (Route<dynamic> route) => false,
-                        );
-                      }, child: Text('Delete'))],
+                            );
+                          },
+                          child: Text('Delete'))
+                    ],
                   ),
                 );
               }

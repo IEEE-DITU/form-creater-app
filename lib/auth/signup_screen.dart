@@ -1,27 +1,28 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ieee_forms/screens/loading_screen.dart';
-import 'package:ieee_forms/screens/signup_screen.dart';
+import 'package:ieee_forms/auth/loading_screen.dart';
 import 'package:ieee_forms/services/firebase_service.dart';
 import 'package:ieee_forms/widgets/snack_bar.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+import 'login_screen.dart';
+
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+class _SignupScreenState extends State<SignupScreen> {
   bool _isHidden = true;
-  // bool _isCheck = false;
-  FirebaseService fire = FirebaseService();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _email = "";
+  String _username = "";
   String _password = "";
+  String _confirmPassword = "";
+  FirebaseService fire = FirebaseService();
   bool isProcessing = false;
 
   @override
@@ -33,14 +34,14 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Form(
             key: _formKey,
             child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const SizedBox(
                     height: 100.0,
                   ),
                   const Text(
-                    'Sign in',
+                    'Sign up',
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
@@ -49,37 +50,42 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(
                     height: 30.0,
                   ),
-                  const Text("Don't have an account yet?",
+                  const Text('Already have an account with us?',
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 16,
                       )),
                   const SizedBox(
-                    height: 5.0,
+                    height: 5,
                   ),
                   RichText(
-                      text: TextSpan(
-                          text: 'Register Here !',
-                          style: const TextStyle(
-                              color: Colors.red,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const SignupScreen()),
-                                (Route<dynamic> route) => false,
-                              );
-                            })),
+                      text: TextSpan(children: [
+                    const TextSpan(
+                        text: 'Skip to ',
+                        style: TextStyle(fontSize: 16, color: Colors.black)),
+                    TextSpan(
+                        text: 'Login !',
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginScreen()),
+                              (Route<dynamic> route) => false,
+                            );
+                          })
+                  ])),
                   const SizedBox(
                     height: 30.0,
                   ),
                   TextFormField(
                     decoration: const InputDecoration(
                         prefixIcon: Icon(Icons.email_outlined),
-                        hintText: " Enter your email address",
+                        hintText: "Enter your email address",
                         labelText: "Email"),
                     onChanged: (value) {
                       _email = value;
@@ -87,6 +93,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     validator: (value) {
                       if (!EmailValidator.validate(_email)) {
                         return 'Enter Valid Email';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.person),
+                        hintText: " Enter your User name ",
+                        labelText: "Username"),
+                    onChanged: (value) {
+                      _username = value;
+                    },
+                    validator: (value) {
+                      if (_username.length < 4) {
+                        return 'Username should be atleast 4 letters';
                       }
                       return null;
                     },
@@ -106,33 +127,34 @@ class _LoginScreenState extends State<LoginScreen> {
                     onChanged: (value) {
                       _password = value;
                     },
+                    validator: (value) {
+                      if (_password.length < 6) {
+                        return 'Password should be atleast 4 characters';
+                      }
+                      return null;
+                    },
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Row(
-                      //   children: [
-                      //     Checkbox(
-                      //         value: _isCheck,
-                      //         onChanged: (val) {
-                      //           setState(() {
-                      //             _isCheck = val!;
-                      //           });
-                      //         }),
-                      //     const Text(
-                      //       "Remember me",
-                      //       style: TextStyle(fontSize: 13),
-                      //     ),
-                      //   ],
-                      // ),
-                      TextButton(
-                          onPressed: (() {}),
-                          child: const Text(
-                            'Forgot password?',
-                            style: TextStyle(color: Colors.black54),
-                          ))
-                    ],
+                  TextFormField(
+                    obscureText: _isHidden,
+                    decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.lock),
+                        suffixIcon: InkWell(
+                          onTap: _togglePasswordView,
+                          child: Icon(_isHidden
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                        ),
+                        hintText: "Confirm your Password",
+                        labelText: "Confirmation Password"),
+                    onChanged: (value) {
+                      _confirmPassword = value;
+                    },
+                    validator: (value) {
+                      if (_password != _confirmPassword) {
+                        return 'Password does not match';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(
                     height: 30.0,
@@ -146,19 +168,18 @@ class _LoginScreenState extends State<LoginScreen> {
                           ? const CircularProgressIndicator(
                               color: Colors.white,
                             )
-                          : const Text('Login'),
+                          : const Text('Register'),
                       onPressed: () async {
                         SystemChannels.textInput.invokeMethod('TextInput.hide');
                         if (!isProcessing) {
                           setState(() {
                             isProcessing = true;
                           });
-                          debugPrint('Login');
+                          debugPrint('Register');
                           if (_formKey.currentState!.validate()) {
-                            try {
-                              await FirebaseAuth.instance
-                                  .signInWithEmailAndPassword(
-                                      email: _email, password: _password);
+                            bool isSuccess = await fire.signupNewUser(
+                                _email, _password, _username);
+                            if (isSuccess) {
                               // ignore: use_build_context_synchronously
                               Navigator.pushAndRemoveUntil(
                                 context,
@@ -167,34 +188,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                         const LoadingScreen()),
                                 (Route<dynamic> route) => false,
                               );
-                            } on FirebaseAuthException catch (e) {
-                              debugPrint(e.code.toString());
-
-                              if (e.code == 'user-not-found') {
-                                // ignore: use_build_context_synchronously
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBarUserNotFound);
-                              } else if (e.code == 'wrong-password') {
-                                // ignore: use_build_context_synchronously
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBarLoginFailed);
-                              } else if (e.code == 'network-request-failed') {
-                                // ignore: use_build_context_synchronously
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBarInternetError);
-                              }
-
+                            } else {
+                              // ignore: use_build_context_synchronously
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBarSignupUnsuccessful);
                             }
-                          } else {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBarInvalidCredentials);
                           }
-
                           setState(() {
                             isProcessing = false;
                           });
                         }
-                      }),
+                      })
                 ]),
           ),
         ),

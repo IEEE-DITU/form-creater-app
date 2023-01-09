@@ -15,7 +15,6 @@ class _FormSwitchState extends State<FormSwitch> {
   late bool currentValue;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     currentValue = widget.currentValue;
   }

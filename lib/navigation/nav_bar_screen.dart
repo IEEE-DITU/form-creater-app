@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ieee_forms/screens/home_screen.dart';
-import 'package:ieee_forms/screens/new_form_screen.dart';
-import 'package:ieee_forms/screens/my_screen.dart';
+import 'package:ieee_forms/navigation/home_screen.dart';
+import 'package:ieee_forms/navigation/new_form_screen.dart';
+import 'package:ieee_forms/navigation/my_screen.dart';
 import 'package:ieee_forms/services/user.dart';
 
 class NavBarScreen extends StatefulWidget {
@@ -28,7 +28,6 @@ class _NavBarScreenState extends State<NavBarScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     loadData();
     super.initState();
   }
