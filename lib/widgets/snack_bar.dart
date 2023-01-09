@@ -55,3 +55,9 @@ var snackBarSignupUnsuccessful = SnackBar(
     contentType: ContentType.failure,
   ),
 );
+
+var snackBarLinkCopied = const SnackBar(
+  elevation: 0,
+    behavior: SnackBarBehavior.floating,
+    backgroundColor: Color(0xFF333333),
+    content: Text('Copied to clipboard'));

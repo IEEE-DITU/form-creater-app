@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ieee_forms/screens/loading_screen.dart';
-import '../screens/signup_screen.dart';
+import 'package:ieee_forms/auth/loading_screen.dart';
+import 'auth/signup_screen.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -20,9 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.red
-      ),
+      theme: ThemeData(primarySwatch: Colors.red),
       debugShowCheckedModeBanner: false,
       home: const LoadingScreen(),
     );

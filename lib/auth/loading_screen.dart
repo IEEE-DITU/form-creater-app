@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:ieee_forms/screens/email_verify_screen.dart';
-import 'package:ieee_forms/screens/login_screen.dart';
+import 'package:ieee_forms/auth/email_verify_screen.dart';
+import 'package:ieee_forms/auth/login_screen.dart';
 
 class LoadingScreen extends StatelessWidget {
   const LoadingScreen({Key? key}) : super(key: key);

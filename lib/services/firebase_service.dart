@@ -1,3 +1,4 @@
+import 'package:ieee_forms/services/form_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -42,20 +43,58 @@ class FirebaseService {
 
   Future<String> createNewForm(String formTitle, String timeStamp) async {
     String formUuid = uuid.v4();
-    FirebaseFirestore.instance.collection('forms').doc(formUuid).set({
+    await FirebaseFirestore.instance.collection('forms').doc(formUuid).set({
       'acceptingResponses': true,
       'createdAt': timeStamp,
-      'createrId': MyUser.currentUser.uid,
+      'creatorId': MyUser.currentUser.uid,
       'id': formUuid,
       'questions': [],
       'title': formTitle
     });
 
     MyUser.currentUser.forms.add(formUuid);
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection('users')
         .doc(MyUser.currentUser.uid)
         .update({'forms': MyUser.currentUser.forms});
   return formUuid;
+  }
+
+  Future<void> deleteForm(String formId) async {
+    await FirebaseFirestore.instance.collection('forms').doc(formId).delete();
+    MyUser.currentUser.forms.remove(formId);
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(MyUser.currentUser.uid)
+        .update({'forms': MyUser.currentUser.forms});
+  }
+
+  Future<FormData> getFormData(String formID) async {
+    String formTitle = "";
+    String createdAt = "";
+    bool accRes = false;
+    await FirebaseFirestore.instance
+        .collection('forms')
+        .doc(formID)
+        .get()
+        .then((DocumentSnapshot doc) {
+      formTitle = doc['title'];
+      createdAt = doc['createdAt'];
+      accRes = doc['acceptingResponses'];
+    });
+
+    FormData form = FormData(
+        formTitle: formTitle,
+        formId: formID,
+        createdAt: createdAt,
+        acceptingResponses: accRes);
+
+    debugPrint("Finish");
+    return form;
+  }
+  
+  Future<void> toggleAcceptingResponses(String formID, bool currentState) async {
+    FirebaseFirestore.instance.collection('forms').doc(formID).update(
+        {'acceptingResponses': !currentState});
   }
 }
