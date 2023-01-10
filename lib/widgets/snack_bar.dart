@@ -56,6 +56,17 @@ var snackBarSignupUnsuccessful = SnackBar(
   ),
 );
 
+var snackBarSavedSuccessfully = SnackBar(
+  elevation: 0,
+  behavior: SnackBarBehavior.floating,
+  backgroundColor: Colors.transparent,
+  content: AwesomeSnackbarContent(
+    title: 'Success!! ',
+    message: 'Form Updated!',
+    contentType: ContentType.success,
+  ),
+);
+
 var snackBarLinkCopied = const SnackBar(
   elevation: 0,
     behavior: SnackBarBehavior.floating,
