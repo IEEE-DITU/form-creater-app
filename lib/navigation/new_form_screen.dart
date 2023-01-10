@@ -10,6 +10,9 @@ class NewFormScreen extends StatefulWidget {
 }
 
 class _NewFormScreenState extends State<NewFormScreen> {
+  //Disable button While processing
+  int maxclick = 1;
+  int counter = 1;
   FirebaseService fire = FirebaseService();
   String formTitle = "";
   @override
@@ -39,15 +42,21 @@ class _NewFormScreenState extends State<NewFormScreen> {
                         borderRadius: BorderRadius.circular(50)),
                     minimumSize: const Size.fromHeight(50)),
                 child: const Text('Add New Form'),
-                onPressed: () async {
-                  String formID =
-                      await fire.createNewForm(formTitle, getCurrentDate());
-                  //ignore:use_build_context_synchronously
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => FormScreen(formId: formID)));
-                })
+                onPressed: counter > maxclick
+                    ? null
+                    : () async {
+                        String formID = await fire.createNewForm(
+                            formTitle, getCurrentDate());
+                        //ignore:use_build_context_synchronously
+                        setState(() {
+                          counter++;
+                        });
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    FormScreen(formId: formID)));
+                      })
           ],
         ),
       ),
