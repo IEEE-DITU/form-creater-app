@@ -41,22 +41,22 @@ class _NewFormScreenState extends State<NewFormScreen> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50)),
                     minimumSize: const Size.fromHeight(50)),
-                child: const Text('Add New Form'),
                 onPressed: counter > maxclick
                     ? null
                     : () async {
                         String formID = await fire.createNewForm(
                             formTitle, getCurrentDate());
-                        //ignore:use_build_context_synchronously
                         setState(() {
                           counter++;
                         });
+                        //ignore:use_build_context_synchronously
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
                                     FormScreen(formId: formID)));
-                      })
+                      },
+                child: const Text('Add New Form'))
           ],
         ),
       ),
