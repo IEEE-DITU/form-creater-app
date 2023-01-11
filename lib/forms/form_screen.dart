@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ieee_forms/navigation/nav_bar_screen.dart';
 import 'package:ieee_forms/services/firebase_service.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:ieee_forms/services/questions.dart';
 import 'package:ieee_forms/widgets/question_widgets.dart';
 import 'package:ieee_forms/widgets/snack_bar.dart';
 import '../services/form_data.dart';
@@ -39,6 +40,7 @@ class _FormScreenState extends State<FormScreen> {
         : GestureDetector(
             onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
             child: Scaffold(
+              resizeToAvoidBottomInset: false,
                 appBar: AppBar(
                   toolbarHeight: 70,
                   title: TextFormField(
@@ -100,12 +102,151 @@ class _FormScreenState extends State<FormScreen> {
                       image: DecorationImage(
                           image: AssetImage('Assets/Background.png'),
                           fit: BoxFit.cover)),
-                  child: ListView.builder(
-                    itemCount: FormData.currentForm.questions.length,
-                      itemBuilder: (context, index) {
-                      debugPrint(FormData.currentForm.questions[index].toString());
-                      return TextTypeQuestion(index: index);
-                      }),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                            itemCount: FormData.currentForm.questions.length,
+                            itemBuilder: (context, index) {
+                              String questionType = FormData
+                                  .currentForm.questions[index]['questionType'];
+                              return Column(
+                                children: [
+                                  Container(
+                                    key: GlobalKey(),
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 10),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 10),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        color: Colors.white),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: TextFormField(
+                                                decoration: InputDecoration(
+                                                    prefix:
+                                                        Text('${index + 1}.  '),
+                                                    border: InputBorder.none,
+                                                errorStyle: const TextStyle(color: Colors.red)),
+                                                initialValue: FormData
+                                                        .currentForm
+                                                        .questions[index]
+                                                    ['questionTitle'],
+                                                onChanged: (val) {
+                                                  FormData.currentForm
+                                                          .questions[index]
+                                                      ['questionTitle'] = val;
+                                                },
+                                                validator: (val) {
+                                                  if(val == '') {
+                                                    return 'Question Title cannot be empty';
+                                                  }
+                                                  return null;
+                                                },
+                                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                              ),
+                                            ),
+                                            Container(
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                              child: IconButton(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      FormData
+                                                          .currentForm.questions
+                                                          .removeAt(index);
+                                                    });
+                                                  },
+                                                  icon: const Icon(
+                                                    Icons.delete,
+                                                    color: Colors.red,
+                                                  )),
+                                            ),
+                                          ],
+                                        ),
+                                        (questionType == 'text')? 
+                                        TextTypeQuestion(index: index) : (questionType == 'singleChoice')? 
+                                        ChoiceTypeQuestion(index: index, type: 'single') : ChoiceTypeQuestion(index: index, type: 'multiple'),
+                                        Align(
+                                          alignment: Alignment.bottomRight,
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                .50,
+                                            child: DropdownButtonFormField(
+                                                value: questionType,
+                                                items: const [
+                                                  DropdownMenuItem(
+                                                      value: 'text',
+                                                      child: Text('Text')),
+                                                  DropdownMenuItem(
+                                                      value: 'singleChoice',
+                                                      child: Text(
+                                                          'Single Choice')),
+                                                  DropdownMenuItem(
+                                                      value: 'multipleChoice',
+                                                      child: Text(
+                                                          'Multiple Choice'))
+                                                ],
+                                                onChanged: (value) {
+                                                  FormData.currentForm
+                                                          .questions[index]
+                                                      ['questionType'] = value;
+                                                  setState(() {
+                                                    questionType = value!;
+                                                  });
+                                                }),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  (index ==
+                                          FormData.currentForm.questions
+                                                  .length -
+                                              1)
+                                      ? Container(
+                                    margin: const EdgeInsets.only(top: 20, bottom: 50, left: 16, right: 16),
+                                        child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            50)),
+                                                minimumSize:
+                                                    const Size.fromHeight(50)),
+                                            child:
+                                                const Text('Add new Questions'),
+                                            onPressed: () {
+                                              FormQuestions questions =
+                                                  FormQuestions();
+                                              setState(() {
+                                                FormData.currentForm.questions
+                                                    .add(questions
+                                                        .defaultTextTypeQuestion);
+                                              });
+                                            }),
+                                      )
+                                      : const SizedBox(),
+                                ],
+                              );
+                            }),
+                      ),
+                    ],
+                  ),
                 )),
           );
   }
