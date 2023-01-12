@@ -104,7 +104,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Expanded(
                                             child: FormSwitch(
                                               formId: formId,
-                                              currentValue: accRes,
+                                              initialValue: accRes,
+                                              function: 'toggleResponse',
                                             ),
                                           ),
                                           Expanded(
