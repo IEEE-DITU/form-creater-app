@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:ieee_forms/forms/form_screen.dart';
 import 'package:ieee_forms/services/firebase_service.dart';
 
+import '../widgets/scaffold_widget.dart';
+
 class NewFormScreen extends StatefulWidget {
   const NewFormScreen({Key? key}) : super(key: key);
 
@@ -17,48 +19,49 @@ class _NewFormScreenState extends State<NewFormScreen> {
   String formTitle = "";
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            TextFormField(
-              decoration: const InputDecoration(
-                  // prefixIcon: Icon(Icons.email_outlined),
-                  hintText: " Enter Form Title",
-                  labelText: "Title"),
-              onChanged: (value) {
-                formTitle = value;
-              },
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50)),
-                    minimumSize: const Size.fromHeight(50)),
-                onPressed: counter > maxclick
-                    ? null
-                    : () async {
-                        String formID = await fire.createNewForm(
-                            formTitle, getCurrentDate());
-                        setState(() {
-                          counter++;
-                        });
-                        //ignore:use_build_context_synchronously
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    FormScreen(formId: formID)));
-                      },
-                child: const Text('Add New Form'))
-          ],
-        ),
+    return CustomScaffold(
+      appBar: AppBar(
+        title: const Text('Create New Form'),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('Enter Form Title', style: TextStyle(fontSize: 18),),
+          TextFormField(
+            decoration: const InputDecoration(
+
+                hintText: " Enter Form Title",
+                labelText: "Title"),
+            onChanged: (value) {
+              formTitle = value;
+            },
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50)),
+                  minimumSize: const Size.fromHeight(50)),
+              onPressed: counter > maxclick
+                  ? null
+                  : () async {
+                      String formID = await fire.createNewForm(
+                          formTitle, getCurrentDate());
+                      setState(() {
+                        counter++;
+                      });
+                      //ignore:use_build_context_synchronously
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  FormScreen(formId: formID)));
+                    },
+              child: const Text('Add New Form'))
+        ],
       ),
     );
   }
