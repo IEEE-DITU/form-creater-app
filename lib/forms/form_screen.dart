@@ -5,6 +5,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:ieee_forms/services/questions.dart';
 import 'package:ieee_forms/widgets/question_widgets.dart';
 import 'package:ieee_forms/widgets/snack_bar.dart';
+import 'package:ieee_forms/widgets/switch.dart';
 import '../services/form_data.dart';
 
 FirebaseService fire = FirebaseService();
@@ -40,7 +41,7 @@ class _FormScreenState extends State<FormScreen> {
         : GestureDetector(
             onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
             child: Scaffold(
-              resizeToAvoidBottomInset: false,
+                resizeToAvoidBottomInset: false,
                 appBar: AppBar(
                   toolbarHeight: 70,
                   title: TextFormField(
@@ -108,8 +109,10 @@ class _FormScreenState extends State<FormScreen> {
                         child: ListView.builder(
                             itemCount: FormData.currentForm.questions.length,
                             itemBuilder: (context, index) {
-                              String questionType = FormData
-                                  .currentForm.questions[index]['questionType'];
+                              final currentQuestion =
+                                  FormData.currentForm.questions[index];
+                              String questionType =
+                                  currentQuestion['questionType'];
                               return Column(
                                 children: [
                                   Container(
@@ -133,23 +136,23 @@ class _FormScreenState extends State<FormScreen> {
                                                     prefix:
                                                         Text('${index + 1}.  '),
                                                     border: InputBorder.none,
-                                                errorStyle: const TextStyle(color: Colors.red)),
-                                                initialValue: FormData
-                                                        .currentForm
-                                                        .questions[index]
-                                                    ['questionTitle'],
+                                                    errorStyle: const TextStyle(
+                                                        color: Colors.red)),
+                                                initialValue: currentQuestion[
+                                                    'questionTitle'],
                                                 onChanged: (val) {
-                                                  FormData.currentForm
-                                                          .questions[index]
-                                                      ['questionTitle'] = val;
+                                                  currentQuestion[
+                                                      'questionTitle'] = val;
                                                 },
                                                 validator: (val) {
-                                                  if(val == '') {
+                                                  if (val == '') {
                                                     return 'Question Title cannot be empty';
                                                   }
                                                   return null;
                                                 },
-                                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                autovalidateMode:
+                                                    AutovalidateMode
+                                                        .onUserInteraction,
                                               ),
                                             ),
                                             Container(
@@ -174,42 +177,62 @@ class _FormScreenState extends State<FormScreen> {
                                             ),
                                           ],
                                         ),
-                                        (questionType == 'text')? 
-                                        TextTypeQuestion(index: index) : (questionType == 'singleChoice')? 
-                                        ChoiceTypeQuestion(index: index, type: 'single') : ChoiceTypeQuestion(index: index, type: 'multiple'),
-                                        Align(
-                                          alignment: Alignment.bottomRight,
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10),
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                .50,
-                                            child: DropdownButtonFormField(
-                                                value: questionType,
-                                                items: const [
-                                                  DropdownMenuItem(
-                                                      value: 'text',
-                                                      child: Text('Text')),
-                                                  DropdownMenuItem(
-                                                      value: 'singleChoice',
-                                                      child: Text(
-                                                          'Single Choice')),
-                                                  DropdownMenuItem(
-                                                      value: 'multipleChoice',
-                                                      child: Text(
-                                                          'Multiple Choice'))
-                                                ],
-                                                onChanged: (value) {
-                                                  FormData.currentForm
-                                                          .questions[index]
-                                                      ['questionType'] = value;
-                                                  setState(() {
-                                                    questionType = value!;
-                                                  });
-                                                }),
-                                          ),
+                                        (questionType == 'text')
+                                            ? TextTypeQuestion(index: index)
+                                            : (questionType == 'singleChoice')
+                                                ? ChoiceTypeQuestion(
+                                                    index: index,
+                                                    type: 'single')
+                                                : ChoiceTypeQuestion(
+                                                    index: index,
+                                                    type: 'multiple'),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                const Text('Required'),
+                                                FormSwitch(
+                                                    initialValue:
+                                                        currentQuestion[
+                                                            'isRequired'],
+                                                    questionIndex: index,
+                                                    function: 'isRequired'),
+                                              ],
+                                            ),
+                                            Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  .50,
+                                              child: DropdownButtonFormField(
+                                                  value: questionType,
+                                                  items: const [
+                                                    DropdownMenuItem(
+                                                        value: 'text',
+                                                        child: Text('Text')),
+                                                    DropdownMenuItem(
+                                                        value: 'singleChoice',
+                                                        child: Text(
+                                                            'Single Choice')),
+                                                    DropdownMenuItem(
+                                                        value: 'multipleChoice',
+                                                        child: Text(
+                                                            'Multiple Choice'))
+                                                  ],
+                                                  onChanged: (value) {
+                                                    currentQuestion[
+                                                        'questionType'] = value;
+                                                    setState(() {
+                                                      questionType = value!;
+                                                    });
+                                                  }),
+                                            ),
+                                          ],
                                         )
                                       ],
                                     ),
@@ -219,27 +242,32 @@ class _FormScreenState extends State<FormScreen> {
                                                   .length -
                                               1)
                                       ? Container(
-                                    margin: const EdgeInsets.only(top: 20, bottom: 50, left: 16, right: 16),
-                                        child: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            50)),
-                                                minimumSize:
-                                                    const Size.fromHeight(50)),
-                                            child:
-                                                const Text('Add new Questions'),
-                                            onPressed: () {
-                                              FormQuestions questions =
-                                                  FormQuestions();
-                                              setState(() {
-                                                FormData.currentForm.questions
-                                                    .add(questions
-                                                        .defaultTextTypeQuestion);
-                                              });
-                                            }),
-                                      )
+                                          margin: const EdgeInsets.only(
+                                              top: 20,
+                                              bottom: 50,
+                                              left: 16,
+                                              right: 16),
+                                          child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              50)),
+                                                  minimumSize:
+                                                      const Size.fromHeight(
+                                                          50)),
+                                              child: const Text(
+                                                  'Add new Questions'),
+                                              onPressed: () {
+                                                FormQuestions questions =
+                                                    FormQuestions();
+                                                setState(() {
+                                                  FormData.currentForm.questions
+                                                      .add(questions
+                                                          .defaultTextTypeQuestion);
+                                                });
+                                              }),
+                                        )
                                       : const SizedBox(),
                                 ],
                               );
