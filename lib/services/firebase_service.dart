@@ -2,6 +2,7 @@ import 'package:ieee_forms/services/form_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:ieee_forms/services/questions.dart';
 import 'package:ieee_forms/services/user.dart';
 import 'package:uuid/uuid.dart';
 
@@ -42,22 +43,28 @@ class FirebaseService {
   }
 
   Future<String> createNewForm(String formTitle, String timeStamp) async {
+    FormQuestions questions = FormQuestions();
     String formUuid = uuid.v4();
     await FirebaseFirestore.instance.collection('forms').doc(formUuid).set({
       'acceptingResponses': true,
       'createdAt': timeStamp,
       'creatorId': MyUser.currentUser.uid,
       'id': formUuid,
-      'questions': [],
+      'questions': [questions.defaultTextTypeQuestion],
       'title': formTitle
     });
+
+    await FirebaseFirestore.instance
+        .collection('responses')
+        .doc(formUuid)
+        .set({'responses': []});
 
     MyUser.currentUser.forms.add(formUuid);
     await FirebaseFirestore.instance
         .collection('users')
         .doc(MyUser.currentUser.uid)
         .update({'forms': MyUser.currentUser.forms});
-  return formUuid;
+    return formUuid;
   }
 
   Future<void> deleteForm(String formId) async {
@@ -67,12 +74,25 @@ class FirebaseService {
         .collection('users')
         .doc(MyUser.currentUser.uid)
         .update({'forms': MyUser.currentUser.forms});
+
+    await FirebaseFirestore.instance
+        .collection('responses')
+        .doc(formId)
+        .delete();
+  }
+
+  Future<void> updateCurrentForm(FormData form) async {
+    await FirebaseFirestore.instance
+        .collection('forms')
+        .doc(form.formId)
+        .update({'questions': form.questions, 'title': form.formTitle});
   }
 
   Future<FormData> getFormData(String formID) async {
     String formTitle = "";
     String createdAt = "";
     bool accRes = false;
+    List questions = [];
     await FirebaseFirestore.instance
         .collection('forms')
         .doc(formID)
@@ -81,20 +101,25 @@ class FirebaseService {
       formTitle = doc['title'];
       createdAt = doc['createdAt'];
       accRes = doc['acceptingResponses'];
+      questions = doc['questions'];
     });
 
     FormData form = FormData(
         formTitle: formTitle,
         formId: formID,
         createdAt: createdAt,
-        acceptingResponses: accRes);
+        acceptingResponses: accRes,
+        questions: questions);
 
     debugPrint("Finish");
     return form;
   }
-  
-  Future<void> toggleAcceptingResponses(String formID, bool currentState) async {
-    FirebaseFirestore.instance.collection('forms').doc(formID).update(
-        {'acceptingResponses': !currentState});
+
+  Future<void> toggleAcceptingResponses(
+      String formID, bool currentState) async {
+    FirebaseFirestore.instance
+        .collection('forms')
+        .doc(formID)
+        .update({'acceptingResponses': !currentState});
   }
 }

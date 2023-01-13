@@ -42,6 +42,7 @@ class _NavBarScreenState extends State<NavBarScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Center(
         child: (isProcessing)
             ? const CircularProgressIndicator()
