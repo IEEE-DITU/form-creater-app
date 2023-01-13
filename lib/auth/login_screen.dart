@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ieee_forms/auth/forgot_password_screen.dart';
 import 'package:ieee_forms/auth/loading_screen.dart';
 import 'package:ieee_forms/auth/signup_screen.dart';
 import 'package:ieee_forms/services/firebase_service.dart';
@@ -127,7 +128,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       //   ],
                       // ),
                       TextButton(
-                          onPressed: (() {}),
+                          onPressed: (() {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: ((context) => const password())));
+                          }),
                           child: const Text(
                             'Forgot password?',
                             style: TextStyle(color: Colors.black54),

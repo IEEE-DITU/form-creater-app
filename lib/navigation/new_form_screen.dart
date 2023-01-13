@@ -48,9 +48,11 @@ class _NewFormScreenState extends State<NewFormScreen> {
                         String formID = await fire.createNewForm(
                             formTitle, getCurrentDate());
                         //ignore:use_build_context_synchronously
-                        setState(() {
-                          counter++;
-                        });
+                          await Future.delayed(const Duration(milliseconds: 10));
+                          setState(() {
+                            counter++;
+                          });
+                        
                         Navigator.push(
                             context,
                             MaterialPageRoute(

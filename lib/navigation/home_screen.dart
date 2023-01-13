@@ -6,6 +6,7 @@ import 'package:ieee_forms/services/user.dart';
 
 import '../widgets/snack_bar.dart';
 import '../widgets/switch.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -23,10 +24,12 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('My forms'),
       ),
+      
       body: Container(
         decoration: const BoxDecoration(
             image: DecorationImage(
                 image: AssetImage('Assets/Background.png'), fit: BoxFit.cover)),
+                
         child: FutureBuilder(
             future: MyUser.getCurrentUser(),
             builder: (context, snapshot) {
@@ -42,7 +45,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return const CircularProgressIndicator(); //Container
+                              return const CircularProgressIndicator(); 
+                              //Container
                             }
                             if (snapshot.connectionState ==
                                 ConnectionState.done) {
