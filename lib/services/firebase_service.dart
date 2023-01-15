@@ -14,6 +14,7 @@ class FirebaseService {
     try {
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
+      await FirebaseAuth.instance.currentUser?.updateDisplayName(username);
       debugPrint(FirebaseAuth.instance.currentUser!.uid.toString());
       FirebaseFirestore.instance
           .collection('users')
