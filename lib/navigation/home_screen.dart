@@ -4,7 +4,7 @@ import 'package:ieee_forms/services/firebase_cloud.dart';
 import 'package:flutter/material.dart';
 import 'package:ieee_forms/services/user.dart';
 
-import '../widgets/scaffold_widget.dart';
+import '../widgets/custom_scaffold.dart';
 import '../widgets/snack_bar.dart';
 import '../widgets/switch.dart';
 

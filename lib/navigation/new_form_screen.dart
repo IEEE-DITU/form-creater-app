@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ieee_forms/forms/form_screen.dart';
 import 'package:ieee_forms/services/firebase_cloud.dart';
 
-import '../widgets/scaffold_widget.dart';
+import '../widgets/custom_scaffold.dart';
 
 class NewFormScreen extends StatefulWidget {
   const NewFormScreen({Key? key}) : super(key: key);

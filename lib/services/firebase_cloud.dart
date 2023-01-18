@@ -5,10 +5,7 @@ import 'package:ieee_forms/services/user.dart';
 import 'package:flutter/material.dart';
 
 class FirebaseCloudService {
-
-  Future<void> addCollaborator() async {
-
-  }
+  Future<void> addCollaborator() async {}
 
   Future<void> createUserinDB(String email, String username, String uid) async {
     FirebaseFirestore.instance.collection('users').doc(uid).set({
@@ -20,7 +17,8 @@ class FirebaseCloudService {
     });
   }
 
-  Future<String> createNewForm(String formTitle, String timeStamp, String description, String submitDescription) async {
+  Future<String> createNewForm(String formTitle, String timeStamp,
+      String description, String submitDescription) async {
     FormQuestions questions = FormQuestions();
     String formUuid = uuid.v4();
     await FirebaseFirestore.instance.collection('forms').doc(formUuid).set({
@@ -66,7 +64,13 @@ class FirebaseCloudService {
     await FirebaseFirestore.instance
         .collection('forms')
         .doc(form.formId)
-        .update({'questions': form.questions, 'title': form.formTitle});
+        .update({
+      'questions': form.questions,
+      'title': form.formTitle,
+      'collaborators': form.collaborators,
+      'description': form.description,
+      'submit': form.submitDescription
+    });
   }
 
   Future<FormData> getFormData(String formID) async {
@@ -100,8 +104,7 @@ class FirebaseCloudService {
         questions: questions,
         description: description,
         collaborators: collaborators,
-        submitDescription: submitDescription
-    );
+        submitDescription: submitDescription);
     return form;
   }
 
@@ -111,5 +114,19 @@ class FirebaseCloudService {
         .collection('forms')
         .doc(formID)
         .update({'acceptingResponses': !currentState});
+  }
+
+  Future<bool> checkEmailExists(String email) async {
+    bool returnVal = false;
+    await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .get()
+        .then((value) {
+          debugPrint('asf');
+          debugPrint(value.docs.isNotEmpty.toString());
+          returnVal = value.docs.isNotEmpty;
+    });
+    return returnVal;
   }
 }

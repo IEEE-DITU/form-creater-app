@@ -93,15 +93,15 @@ class _FormScreenState extends State<FormScreen> {
                         child: const Icon(Icons.save),
                         label: 'Save Progress',
                         onTap: () async {
-                          customDialog(context, 'Save', 'Do you want to save changes?',() async {
+                          customDialog(context, 'Save',
+                              const Text('Do you want to save changes?'),
+                              () async {
                             await fireCloud
-                              .updateCurrentForm(FormData.currentForm);
-
+                                .updateCurrentForm(FormData.currentForm);
                             //ignore:use_build_context_synchronously
-                            Navigator.of(context).pop();
-                            //ignore:use_build_context_synchronously
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(snackBarSavedSuccessfully);});
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBarSavedSuccessfully);
+                          });
                         }),
                     SpeedDialChild(
                         child: const Icon(Icons.person_add_alt_1_outlined),
@@ -110,7 +110,8 @@ class _FormScreenState extends State<FormScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const CollaboratorScreen()));
+                                  builder: (context) =>
+                                      const CollaboratorScreen()));
                         })
                   ],
                 ),
