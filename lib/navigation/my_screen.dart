@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ieee_forms/services/user.dart';
 
 import '../auth/login_screen.dart';
-import '../widgets/scaffold_widget.dart';
+import '../widgets/custom_scaffold.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({Key? key}) : super(key: key);

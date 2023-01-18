@@ -72,3 +72,14 @@ var snackBarLinkCopied = const SnackBar(
     behavior: SnackBarBehavior.floating,
     backgroundColor: Color(0xFF333333),
     content: Text('Copied to clipboard'));
+
+SnackBar customSnackBar(String title, String message, ContentType type) {
+  return SnackBar(
+    elevation: 0,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: title,
+        message: message,
+        contentType: type,
+      ));
+}

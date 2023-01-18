@@ -1,69 +1,86 @@
+import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class password extends StatefulWidget {
-  const password({super.key});
+import '../widgets/custom_button.dart';
+
+class PasswordScreen extends StatefulWidget {
+  const PasswordScreen({super.key, required this.email});
+  final String email;
 
   @override
-  State<password> createState() => _passwordState();
+  State<PasswordScreen> createState() => _PasswordScreenState();
 }
 
-class _passwordState extends State<password> {
-  final emailController = TextEditingController();
-  // final auth = FirebaseAuth.instance;
+class _PasswordScreenState extends State<PasswordScreen> {
+  String email = "";
+
+  @override
+  void initState() {
+    email = widget.email;
+    super.initState();
+  }
+
+  void navigateLogin() {
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Reset password'),
+          elevation: 0,
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back_ios_new_outlined,
+              color: Colors.black,
+            ),
+            onPressed: () => navigateLogin(),
+          ),
         ),
-        resizeToAvoidBottomInset: false,
-        body: Padding(
-            padding: const EdgeInsets.all(40.0),
-            child: Column(children: [
-              SizedBox(
-                height: 100.0,
+        body: Container(
+            color: Colors.white,
+            padding: const EdgeInsets.all(16.0),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const SizedBox(
+                height: 70.0,
               ),
-              Container(
-                child: Text(
-                  'Receive an email to reset your password',
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
-                ),
+              const Text(
+                'Reset Password',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
               ),
-              SizedBox(
-                height: 50,
+              const SizedBox(
+                height: 20,
               ),
               TextFormField(
-                controller: emailController,
-                decoration: InputDecoration(
-                  hintText: 'Enter your email',
-                  labelText: 'E-mail',
+                decoration: const InputDecoration(
+                  hintText: 'Email',
+                  labelText: 'Enter your Registered Email',
                 ),
+                initialValue: email,
+                onChanged: (value) {
+                  email = value;
+                },
+                validator: (value) {
+                  if (email != '' && EmailValidator.validate(email)) {
+                    return null;
+                  }
+                  return 'Invalid Email';
+                },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 50,
               ),
-              Container(
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 70),
-                      child: ElevatedButton.icon(
-                          onPressed: (() {
-                            // auth.sendPasswordResetEmail(email: emailController.text.toString()).then((value) {
-                            // //   Utils().toastMessage(
-                            // //       'we have send you an E-mail to recover password,please check your e-mail');
-                            // // }).onError((error, stackTrace) {
-                            // //   Utils().toastMessage(error.toString());
-                            // });
-                          }),
-                          icon: Icon(Icons.email),
-                          label: Text('Reset password')),
-                    ),
-                  ],
-                ),
-              )
+              customButton('Get link on email', () {
+                FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+              }),
+              const SizedBox(
+                height: 20,
+              ),
+              customButton('Go back to Login', () => navigateLogin()),
             ])));
   }
 }
-
-

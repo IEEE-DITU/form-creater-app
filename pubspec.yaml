@@ -39,6 +39,7 @@ dependencies:
   email_validator: ^2.1.17
   firebase_core: ^2.4.0
   firebase_auth: ^4.2.3
+  flutter_slidable: ^2.0.0
   flutter_speed_dial: ^6.2.0
   uuid: ^3.0.7
 

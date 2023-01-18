@@ -3,9 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ieee_forms/auth/forgot_password_screen.dart';
 import 'package:ieee_forms/auth/loading_screen.dart';
 import 'package:ieee_forms/auth/signup_screen.dart';
-import 'package:ieee_forms/services/firebase_service.dart';
+import 'package:ieee_forms/services/firebase_authentication.dart';
 import 'package:ieee_forms/widgets/snack_bar.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -19,7 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isHidden = true;
   // bool _isCheck = false;
-  FirebaseService fire = FirebaseService();
+  FirebaseAuthService fireAuth = FirebaseAuthService();
   String _email = "";
   String _password = "";
   bool isProcessing = false;
@@ -127,7 +128,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       //   ],
                       // ),
                       TextButton(
-                          onPressed: (() {}),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PasswordScreen(
+                                          email: _email,
+                                        )));
+                          },
                           child: const Text(
                             'Forgot password?',
                             style: TextStyle(color: Colors.black54),

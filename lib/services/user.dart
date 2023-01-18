@@ -7,6 +7,7 @@ class MyUser {
   late String name;
   late String uid = "";
   late List forms;
+  late String profileImg;
 
   static MyUser currentUser = MyUser();
 
@@ -21,6 +22,7 @@ class MyUser {
         currentUser.uid = doc['uid'];
         currentUser.email = doc['email'];
         currentUser.forms = doc['forms'];
+        currentUser.profileImg = doc['profileImg'];
         debugPrint(currentUser.forms.length.toString());
       }
     });

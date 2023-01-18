@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ieee_forms/auth/loading_screen.dart';
-import 'package:ieee_forms/services/firebase_service.dart';
+import 'package:ieee_forms/services/firebase_authentication.dart';
 import 'package:ieee_forms/widgets/snack_bar.dart';
 
 import 'login_screen.dart';
@@ -22,7 +22,7 @@ class _SignupScreenState extends State<SignupScreen> {
   String _username = "";
   String _password = "";
   String _confirmPassword = "";
-  FirebaseService fire = FirebaseService();
+  FirebaseAuthService fireAuth = FirebaseAuthService();
   bool isProcessing = false;
 
   @override
@@ -177,7 +177,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           });
                           debugPrint('Register');
                           if (_formKey.currentState!.validate()) {
-                            bool isSuccess = await fire.signupNewUser(
+                            bool isSuccess = await fireAuth.signupNewUser(
                                 _email, _password, _username);
                             if (isSuccess) {
                               // ignore: use_build_context_synchronously
