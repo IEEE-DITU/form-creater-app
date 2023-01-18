@@ -1,49 +1,26 @@
-import 'package:ieee_forms/services/form_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:ieee_forms/services/form_data.dart';
 import 'package:ieee_forms/services/questions.dart';
 import 'package:ieee_forms/services/user.dart';
-import 'package:uuid/uuid.dart';
+import 'package:flutter/material.dart';
 
-class FirebaseService {
-  Uuid uuid = const Uuid();
+class FirebaseCloudService {
 
-  Future<bool> signupNewUser(
-      String email, String password, String username) async {
-    try {
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
-      await FirebaseAuth.instance.currentUser?.updateDisplayName(username);
-      debugPrint(FirebaseAuth.instance.currentUser!.uid.toString());
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .set({
-        'email': email,
-        'name': username,
-        'forms': [],
-        'uid': FirebaseAuth.instance.currentUser!.uid
-      });
-    } on FirebaseAuthException catch (e) {
-      debugPrint(e.toString());
-      return false;
-    }
-    return true;
+  Future<void> addCollaborator() async {
+
   }
 
-  Future<bool> loginUser(String email, String password) async {
-    try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
-    } on FirebaseAuthException catch (e) {
-      debugPrint(e.toString());
-      return false;
-    }
-    return true;
+  Future<void> createUserinDB(String email, String username, String uid) async {
+    FirebaseFirestore.instance.collection('users').doc(uid).set({
+      'email': email,
+      'name': username,
+      'forms': [],
+      'uid': uid,
+      'profileImg': 0
+    });
   }
 
-  Future<String> createNewForm(String formTitle, String timeStamp) async {
+  Future<String> createNewForm(String formTitle, String timeStamp, String description, String submitDescription) async {
     FormQuestions questions = FormQuestions();
     String formUuid = uuid.v4();
     await FirebaseFirestore.instance.collection('forms').doc(formUuid).set({
@@ -52,7 +29,10 @@ class FirebaseService {
       'creatorId': MyUser.currentUser.uid,
       'id': formUuid,
       'questions': [questions.defaultTextTypeQuestion],
-      'title': formTitle
+      'title': formTitle,
+      'collaborators': [],
+      'description': description,
+      'submit': submitDescription
     });
 
     await FirebaseFirestore.instance
@@ -94,6 +74,10 @@ class FirebaseService {
     String createdAt = "";
     bool accRes = false;
     List questions = [];
+    String description = '';
+    String submitDescription = "";
+    List collaborators = [];
+
     await FirebaseFirestore.instance
         .collection('forms')
         .doc(formID)
@@ -103,6 +87,9 @@ class FirebaseService {
       createdAt = doc['createdAt'];
       accRes = doc['acceptingResponses'];
       questions = doc['questions'];
+      submitDescription = doc['submit'];
+      description = doc['description'];
+      collaborators = doc['collaborators'];
     });
 
     FormData form = FormData(
@@ -110,9 +97,11 @@ class FirebaseService {
         formId: formID,
         createdAt: createdAt,
         acceptingResponses: accRes,
-        questions: questions);
-
-    debugPrint("Finish");
+        questions: questions,
+        description: description,
+        collaborators: collaborators,
+        submitDescription: submitDescription
+    );
     return form;
   }
 

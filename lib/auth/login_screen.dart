@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:ieee_forms/auth/forgot_password_screen.dart';
 import 'package:ieee_forms/auth/loading_screen.dart';
 import 'package:ieee_forms/auth/signup_screen.dart';
-import 'package:ieee_forms/services/firebase_service.dart';
+import 'package:ieee_forms/services/firebase_authentication.dart';
 import 'package:ieee_forms/widgets/snack_bar.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -20,7 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isHidden = true;
   // bool _isCheck = false;
-  FirebaseService fire = FirebaseService();
+  FirebaseAuthService fireAuth = FirebaseAuthService();
   String _email = "";
   String _password = "";
   bool isProcessing = false;

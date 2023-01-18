@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:ieee_forms/services/firebase_service.dart';
+import 'package:ieee_forms/services/firebase_cloud.dart';
 
 import '../services/form_data.dart';
 
@@ -16,7 +16,7 @@ class FormSwitch extends StatefulWidget {
 }
 
 class _FormSwitchState extends State<FormSwitch> {
-  FirebaseService fire = FirebaseService();
+  FirebaseCloudService fireCloud = FirebaseCloudService();
   late bool currentValue;
   @override
   void initState() {
@@ -30,7 +30,7 @@ class _FormSwitchState extends State<FormSwitch> {
       value: currentValue,
       onChanged: (bool value) async {
         if(widget.function == 'toggleResponse') {
-          await fire.toggleAcceptingResponses(widget.formId!, currentValue);
+          await fireCloud.toggleAcceptingResponses(widget.formId!, currentValue);
         } else if(widget.function == 'isRequired') {
           FormData.currentForm.questions[widget.questionIndex!]['isRequired'] = value;
         }

@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:ieee_forms/forms/form_screen.dart';
-import 'package:ieee_forms/services/firebase_service.dart';
+import 'package:ieee_forms/services/firebase_cloud.dart';
 import 'package:flutter/material.dart';
 import 'package:ieee_forms/services/user.dart';
 
@@ -16,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  FirebaseService fire = FirebaseService();
+  FirebaseCloudService fireCloud = FirebaseCloudService();
   bool isLoading = true;
 
   @override
@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
             itemBuilder: (context, index) {
               String formId = MyUser.currentUser.forms[index];
               return FutureBuilder(
-                  future: fire.getFormData(formId),
+                  future: fireCloud.getFormData(formId),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState ==
                         ConnectionState.waiting) {

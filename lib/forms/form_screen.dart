@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:ieee_forms/forms/collaborator.dart';
 import 'package:ieee_forms/navigation/nav_bar_screen.dart';
-import 'package:ieee_forms/services/firebase_service.dart';
+import 'package:ieee_forms/services/firebase_cloud.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:ieee_forms/services/questions.dart';
+import 'package:ieee_forms/widgets/custom_dialog.dart';
 import 'package:ieee_forms/widgets/question_widgets.dart';
 import 'package:ieee_forms/widgets/snack_bar.dart';
 import 'package:ieee_forms/widgets/switch.dart';
 import '../services/form_data.dart';
 
-FirebaseService fire = FirebaseService();
+FirebaseCloudService fireCloud = FirebaseCloudService();
 
 class FormScreen extends StatefulWidget {
   const FormScreen({Key? key, required this.formId}) : super(key: key);
@@ -28,7 +30,7 @@ class _FormScreenState extends State<FormScreen> {
   }
 
   void getCurrentFormData() async {
-    FormData.currentForm = await fire.getFormData(widget.formId);
+    FormData.currentForm = await fireCloud.getFormData(widget.formId);
     setState(() {
       isLoading = false;
     });
@@ -74,7 +76,7 @@ class _FormScreenState extends State<FormScreen> {
                         child: const Icon(Icons.delete),
                         label: 'Delete Form',
                         onTap: () async {
-                          await fire.deleteForm(widget.formId);
+                          await fireCloud.deleteForm(widget.formId);
                           // ignore: use_build_context_synchronously
                           Navigator.pushAndRemoveUntil(
                             context,
@@ -91,10 +93,24 @@ class _FormScreenState extends State<FormScreen> {
                         child: const Icon(Icons.save),
                         label: 'Save Progress',
                         onTap: () async {
-                          await fire.updateCurrentForm(FormData.currentForm);
-                          //ignore:use_build_context_synchronously
+                          customDialog(context, 'Save', 'Do you want to save changes?',() async {
+                            await fireCloud
+                              .updateCurrentForm(FormData.currentForm);
+
+                            //ignore:use_build_context_synchronously
+                            Navigator.of(context).pop();
+                            //ignore:use_build_context_synchronously
                           ScaffoldMessenger.of(context)
-                              .showSnackBar(snackBarSavedSuccessfully);
+                              .showSnackBar(snackBarSavedSuccessfully);});
+                        }),
+                    SpeedDialChild(
+                        child: const Icon(Icons.person_add_alt_1_outlined),
+                        label: 'Collaborators',
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const CollaboratorScreen()));
                         })
                   ],
                 ),

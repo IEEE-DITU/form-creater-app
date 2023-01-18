@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ieee_forms/forms/form_screen.dart';
-import 'package:ieee_forms/services/firebase_service.dart';
+import 'package:ieee_forms/services/firebase_cloud.dart';
 
 import '../widgets/scaffold_widget.dart';
 
@@ -15,7 +15,7 @@ class _NewFormScreenState extends State<NewFormScreen> {
   //Disable button While processing
   int maxclick = 1;
   int counter = 1;
-  FirebaseService fire = FirebaseService();
+  FirebaseCloudService fireCloud = FirebaseCloudService();
   String formTitle = "";
   @override
   Widget build(BuildContext context) {
@@ -48,8 +48,8 @@ class _NewFormScreenState extends State<NewFormScreen> {
               onPressed: counter > maxclick
                   ? null
                   : () async {
-                      String formID = await fire.createNewForm(
-                          formTitle, getCurrentDate());
+                      String formID = await fireCloud.createNewForm(
+                          formTitle, getCurrentDate(), '', '');
                       setState(() {
                         counter++;
                       });
