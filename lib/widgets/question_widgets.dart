@@ -13,8 +13,6 @@ class TextTypeQuestion extends StatefulWidget {
 class _TextTypeQuestionState extends State<TextTypeQuestion> {
   @override
   Widget build(BuildContext context) {
-    debugPrint("Building");
-    debugPrint(FormData.currentForm.questions[widget.index].toString());
     return SizedBox(
       width: 175,
       child: TextFormField(
@@ -62,17 +60,18 @@ class _ChoiceTypeQuestionState extends State<ChoiceTypeQuestion> {
     return SizedBox(
       height: currentQuestionOptions.length * 70.0 + 60,
       child: ListView.builder(
-        physics: const ClampingScrollPhysics(),
+          physics: const ClampingScrollPhysics(),
           itemCount: currentQuestionOptions.length,
           itemBuilder: (context, ind) {
-          FocusNode focus = FocusNode();
-          focus.addListener(() {
-            if(focus.hasFocus == false && currentQuestionOptions[ind] == '') {
-              setState(() {
-                currentQuestionOptions.removeAt(ind);
-              });
-            }
-          });
+            FocusNode focus = FocusNode();
+            focus.addListener(() {
+              if (focus.hasFocus == false &&
+                  currentQuestionOptions[ind] == '') {
+                setState(() {
+                  currentQuestionOptions.removeAt(ind);
+                });
+              }
+            });
             return Column(
               children: [
                 TextFormField(
@@ -95,7 +94,7 @@ class _ChoiceTypeQuestionState extends State<ChoiceTypeQuestion> {
                     },
                     focusNode: focus,
                     onEditingComplete: () {
-                      if(currentQuestionOptions[ind] == '') {
+                      if (currentQuestionOptions[ind] == '') {
                         setState(() {
                           currentQuestionOptions.removeAt(ind);
                         });
@@ -121,6 +120,49 @@ class _ChoiceTypeQuestionState extends State<ChoiceTypeQuestion> {
               ],
             );
           }),
+    );
+  }
+}
+
+class AttachmentTypeQuestion extends StatefulWidget {
+  const AttachmentTypeQuestion({Key? key, required this.index})
+      : super(key: key);
+
+  final int index;
+  @override
+  State<AttachmentTypeQuestion> createState() => _AttachmentTypeQuestionState();
+}
+
+class _AttachmentTypeQuestionState extends State<AttachmentTypeQuestion> {
+  @override
+  build(BuildContext context) {
+    return SizedBox(
+      width: 175,
+      child: TextFormField(
+        decoration: const InputDecoration(
+            prefix: Text('Attachment Size: '),
+            suffix: Text('MB'),
+            border: InputBorder.none),
+        keyboardType: TextInputType.number,
+        autovalidateMode: AutovalidateMode.always,
+        validator: (value) {
+          if (value == '' || int.parse(value!) == 0) {
+            return 'Size cannot be Empty';
+          }
+          if (int.parse(value) > 20) {
+            return 'Size cannot exceed 20 MB';
+          }
+          return null;
+        },
+        initialValue: FormData.currentForm.questions[widget.index]['maxChoice']
+            .toString(),
+        onChanged: (value) {
+          if (value != '') {
+            FormData.currentForm.questions[widget.index]['maxChoice'] =
+                int.parse(value);
+          }
+        },
+      ),
     );
   }
 }
