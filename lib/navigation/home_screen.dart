@@ -38,115 +38,97 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('My forms'),
       ),
-      child: (isLoading)? const CircularProgressIndicator() :
-      RefreshIndicator(
-        onRefresh: ()  {
-          return getData();
-        },
-        child: ListView.builder(
-            physics: const AlwaysScrollableScrollPhysics(),
-            itemCount: MyUser.currentUser.forms.length,
-            itemBuilder: (context, index) {
-              String formId = MyUser.currentUser.forms[index];
-              return FutureBuilder(
-                  future: fireCloud.getFormData(formId),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState ==
-                        ConnectionState.waiting) {
-                      return const CircularProgressIndicator(); //Container
-                    }
-                    if (snapshot.connectionState ==
-                        ConnectionState.done) {
-                      bool accRes = snapshot.data!.acceptingResponses;
-                      return GestureDetector(
-                        key: GlobalKey(),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      FormScreen(formId: formId)));
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          height: 150,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 20, horizontal: 10),
-                                  width: MediaQuery.of(context)
-                                      .size
-                                      .width *
-                                      0.6,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                          'Form Title: ${snapshot.data!.formTitle}'),
-                                      const SizedBox(
-                                        height: 5,
+      child: (isLoading)
+          ? const CircularProgressIndicator()
+          : RefreshIndicator(
+              onRefresh: () {
+                return getData();
+              },
+              child: ListView.builder(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemCount: MyUser.currentUser.forms.length,
+                  itemBuilder: (context, index) {
+                    String formId = MyUser.currentUser.forms[index];
+                    return FutureBuilder(
+                        future: fireCloud.getFormData(formId),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator(); //Container
+                          }
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            bool accRes = snapshot.data!.acceptingResponses;
+                            return GestureDetector(
+                              key: GlobalKey(),
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            FormScreen(formId: formId)));
+                              },
+                              child: Container(
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                height: 150,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 20, horizontal: 10),
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.6,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                                'Form Title: ${snapshot.data!.formTitle}'),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                                'Creation Date:  ${snapshot.data!.createdAt}'),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            const Text(
+                                                'Number of Responses: 0'),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Expanded(
+                                                child: TextButton(
+                                              child:
+                                                  const Text('View Responses'),
+                                              onPressed: () {},
+                                            ))
+                                          ],
+                                        )),
+                                    Expanded(
+                                      child: FormSwitch(
+                                        formId: formId,
+                                        initialValue: accRes,
+                                        function: 'toggleResponse',
                                       ),
-                                      Text(
-                                          'Creation Date:  ${snapshot.data!.createdAt}'),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      const Text(
-                                          'Number of Responses: 0'),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Expanded(
-                                          child: TextButton(
-                                            child: const Text(
-                                                'View Responses'),
-                                            onPressed: () {},
-                                          ))
-                                    ],
-                                  )),
-                              Column(
-                                children: [
-                                  Expanded(
-                                    child: FormSwitch(
-                                      formId: formId,
-                                      initialValue: accRes,
-                                      function: 'toggleResponse',
-                                    ),
-                                  ),
-                                  Expanded(
-                                      child: TextButton(
-                                          onPressed: () async {
-                                            await Clipboard.setData(
-                                                ClipboardData(
-                                                    text:
-                                                    'https://form-website-seven.vercel.app/form/$formId'));
-                                            //ignore:use_build_context_synchronously
-                                            ScaffoldMessenger.of(
-                                                context)
-                                                .showSnackBar(
-                                                snackBarLinkCopied);
-                                          },
-                                          child: const Text(
-                                              'Get form link')))
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      );
-                    }
-                    return const SizedBox(
-                      height: 10,
-                    );
-                  });
-            }),
-      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+                          return const SizedBox(
+                            height: 10,
+                          );
+                        });
+                  }),
+            ),
     );
   }
 }

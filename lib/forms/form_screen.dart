@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:ieee_forms/forms/collaborator.dart';
 import 'package:ieee_forms/navigation/nav_bar_screen.dart';
 import 'package:ieee_forms/services/firebase_cloud.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:ieee_forms/services/questions.dart';
 import 'package:ieee_forms/widgets/custom_dialog.dart';
 import 'package:ieee_forms/widgets/question_widgets.dart';
 import 'package:ieee_forms/widgets/snack_bar.dart';
 import 'package:ieee_forms/widgets/switch.dart';
+
 import '../services/form_data.dart';
 
 FirebaseCloudService fireCloud = FirebaseCloudService();
@@ -88,7 +89,9 @@ class _FormScreenState extends State<FormScreen> {
                     SpeedDialChild(
                         child: const Icon(Icons.share),
                         label: 'Share Link',
-                        onTap: () {}),
+                        onTap: () async {
+                          qrDialog(context);
+                        }),
                     SpeedDialChild(
                         child: const Icon(Icons.save),
                         label: 'Save Progress',
@@ -194,15 +197,20 @@ class _FormScreenState extends State<FormScreen> {
                                             ),
                                           ],
                                         ),
-                                        (questionType == 'text')
-                                            ? TextTypeQuestion(index: index)
-                                            : (questionType == 'singleChoice')
-                                                ? ChoiceTypeQuestion(
-                                                    index: index,
-                                                    type: 'single')
-                                                : ChoiceTypeQuestion(
-                                                    index: index,
-                                                    type: 'multiple'),
+                                        (questionType == 'attachment')
+                                            ? AttachmentTypeQuestion(
+                                                index: index,
+                                              )
+                                            : (questionType == 'text')
+                                                ? TextTypeQuestion(index: index)
+                                                : (questionType ==
+                                                        'singleChoice')
+                                                    ? ChoiceTypeQuestion(
+                                                        index: index,
+                                                        type: 'single')
+                                                    : ChoiceTypeQuestion(
+                                                        index: index,
+                                                        type: 'multiple'),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
@@ -239,7 +247,11 @@ class _FormScreenState extends State<FormScreen> {
                                                     DropdownMenuItem(
                                                         value: 'multipleChoice',
                                                         child: Text(
-                                                            'Multiple Choice'))
+                                                            'Multiple Choice')),
+                                                    DropdownMenuItem(
+                                                        value: 'attachment',
+                                                        child:
+                                                            Text('Attachment'))
                                                   ],
                                                   onChanged: (value) {
                                                     currentQuestion[
