@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:ieee_forms/forms/form_screen.dart';
+import 'package:ieee_forms/forms/response_screen.dart';
 import 'package:ieee_forms/services/firebase_cloud.dart';
 import 'package:flutter/material.dart';
 import 'package:ieee_forms/services/user.dart';
@@ -98,8 +99,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             const SizedBox(
                                               height: 5,
                                             ),
-                                            const Text(
-                                                'Number of Responses: 0'),
+                                            Text(
+                                                'Number of Responses: ${snapshot.data!.allResponses.length}'),
                                             const SizedBox(
                                               height: 5,
                                             ),
@@ -107,7 +108,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 child: TextButton(
                                               child:
                                                   const Text('View Responses'),
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ResponseScreen(
+                                                                currentForm:
+                                                                    snapshot
+                                                                        .data!)));
+                                              },
                                             ))
                                           ],
                                         )),

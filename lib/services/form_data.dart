@@ -7,6 +7,7 @@ class FormData {
   final List collaborators;
   final String description;
   final String submitDescription;
+  final List allResponses;
 
   static late FormData currentForm;
 
@@ -19,5 +20,6 @@ class FormData {
     required this.collaborators,
     required this.description,
     required this.submitDescription,
+    required this.allResponses,
   });
 }
