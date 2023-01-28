@@ -81,6 +81,7 @@ class FirebaseCloudService {
     String description = '';
     String submitDescription = "";
     List collaborators = [];
+    List allResponses = [];
 
     await FirebaseFirestore.instance
         .collection('forms')
@@ -96,6 +97,14 @@ class FirebaseCloudService {
       collaborators = doc['collaborators'];
     });
 
+    await FirebaseFirestore.instance
+        .collection('responses')
+        .doc(formID)
+        .get()
+        .then((DocumentSnapshot doc) {
+          allResponses = doc['responses'];
+    });
+
     FormData form = FormData(
         formTitle: formTitle,
         formId: formID,
@@ -104,7 +113,8 @@ class FirebaseCloudService {
         questions: questions,
         description: description,
         collaborators: collaborators,
-        submitDescription: submitDescription);
+        submitDescription: submitDescription,
+        allResponses: allResponses);
     return form;
   }
 
@@ -123,9 +133,9 @@ class FirebaseCloudService {
         .where('email', isEqualTo: email)
         .get()
         .then((value) {
-          debugPrint('asf');
-          debugPrint(value.docs.isNotEmpty.toString());
-          returnVal = value.docs.isNotEmpty;
+      debugPrint('asf');
+      debugPrint(value.docs.isNotEmpty.toString());
+      returnVal = value.docs.isNotEmpty;
     });
     return returnVal;
   }

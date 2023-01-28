@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_signin_button/button_list.dart';
+import 'package:flutter_signin_button/button_view.dart';
 import 'package:ieee_forms/auth/forgot_password_screen.dart';
 import 'package:ieee_forms/auth/loading_screen.dart';
 import 'package:ieee_forms/auth/signup_screen.dart';
@@ -202,6 +204,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           });
                         }
                       }),
+                  const SizedBox(
+                    height: 60,
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: SignInButton(Buttons.Google, onPressed: () {
+                    }),
+                  )
                 ]),
           ),
         ),

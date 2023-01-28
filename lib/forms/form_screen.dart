@@ -104,6 +104,13 @@ class _FormScreenState extends State<FormScreen> {
                             //ignore:use_build_context_synchronously
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(snackBarSavedSuccessfully);
+                            // ignore: use_build_context_synchronously
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const NavBarScreen()),
+                                  (Route<dynamic> route) => false,
+                            );
                           });
                         }),
                     SpeedDialChild(
