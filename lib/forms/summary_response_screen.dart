@@ -44,11 +44,9 @@ class _SummaryResponseState extends State<SummaryResponse> {
                 ),
                 (currentQuestion['questionType'] == 'text')
                     ? Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 30),
-                        height: responses.length *
-                            10.0 *
-                            (currentQuestion['maxChoice'] / 20),
+                        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                         child: ListView.builder(
+                          shrinkWrap: true,
                             physics: const ClampingScrollPhysics(),
                             itemCount: responses.length,
                             itemBuilder: (ctx, ind) {
@@ -66,11 +64,9 @@ class _SummaryResponseState extends State<SummaryResponse> {
                       )
                     : (currentQuestion['questionType'] == 'singleChoice')
                         ? Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 30),
-                            height: responses.length *
-                                10.0 *
-                                (currentQuestion['maxChoice'] / 20),
+                            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                             child: ListView.builder(
+                              shrinkWrap: true,
                                 physics: const ClampingScrollPhysics(),
                                 itemCount: responses.length,
                                 itemBuilder: (ctx, ind) {
@@ -89,11 +85,10 @@ class _SummaryResponseState extends State<SummaryResponse> {
                         : (currentQuestion['questionType'] == 'multipleChoice')
                             ? Container(
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 30),
-                                height: responses.length *
-                                    10.0 *
-                                    (currentQuestion['maxChoice'] / 20),
+                                    const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+
                                 child: ListView.builder(
+                                  shrinkWrap: true,
                                     physics: const ClampingScrollPhysics(),
                                     itemCount: responses.length,
                                     itemBuilder: (ctx, ind) {
@@ -123,9 +118,9 @@ class _SummaryResponseState extends State<SummaryResponse> {
                               )
                             : Container(
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 30),
-                                height: responses.length * 30.0,
+                                    const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                                 child: ListView.builder(
+                                  shrinkWrap: true,
                                     physics: const ClampingScrollPhysics(),
                                     itemCount: responses.length,
                                     itemBuilder: (ctx, ind) {
@@ -140,15 +135,19 @@ class _SummaryResponseState extends State<SummaryResponse> {
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                      builder: (context) => ImageScreen(
-                                                          imageUrl: responses[
-                                                                  ind][
-                                                              currentQuestion[
-                                                                  'questionId']], responseIndex: 'Response ${ind + 1}',)));
+                                                      builder: (context) =>
+                                                          ImageScreen(
+                                                            imageUrl: responses[
+                                                                    ind][
+                                                                currentQuestion[
+                                                                    'questionId']],
+                                                            responseIndex:
+                                                                'Response ${ind + 1}',
+                                                          )));
                                             },
                                             child: Text(
                                               'Response ${ind + 1}',
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   color: Colors.indigo),
                                             )),
                                       );

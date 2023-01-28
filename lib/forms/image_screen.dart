@@ -9,16 +9,16 @@ import 'package:ieee_forms/widgets/snack_bar.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ImageScreen extends StatelessWidget {
-  ImageScreen({Key? key, required this.imageUrl, required this.responseIndex}) : super(key: key);
+  ImageScreen({Key? key, required this.imageUrl, this.responseIndex}) : super(key: key);
   final String imageUrl;
-  final String responseIndex;
+  final String? responseIndex;
   final GlobalKey _globalKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
       appBar: AppBar(
-        title: Text(responseIndex),
+        title: (responseIndex != null) ? Text(responseIndex!) : const Text(''),
         actions: [
           IconButton(onPressed: () async {
             Directory tempDir = await getTemporaryDirectory();
@@ -58,7 +58,7 @@ class ImageScreen extends StatelessWidget {
                 }
                 return Center(
                   child: CircularProgressIndicator(
-                    value: loadingProgress.expectedTotalBytes != null
+                    value: loadingProgress.expectedTotalBytes != null && loadingProgress.cumulativeBytesLoaded > (loadingProgress.expectedTotalBytes! / 2)
                         ? loadingProgress.cumulativeBytesLoaded /
                         loadingProgress.expectedTotalBytes!
                         : null,

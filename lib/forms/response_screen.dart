@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ieee_forms/forms/summary_response.dart';
+import 'package:ieee_forms/forms/individual_response_screen.dart';
+import 'package:ieee_forms/forms/summary_response_screen.dart';
 import 'package:ieee_forms/services/form_data.dart';
 import 'package:ieee_forms/widgets/custom_scaffold.dart';
 
@@ -26,9 +27,7 @@ class ResponseScreen extends StatelessWidget {
         child: TabBarView(
           children: [
             SummaryResponse(currentForm: currentForm,),
-            Container(
-              color: Colors.purple,
-            )
+            IndividualResponseScreen(currentForm: currentForm,)
           ],
         ),
       ),
