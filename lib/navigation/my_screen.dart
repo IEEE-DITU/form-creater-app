@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ieee_forms/services/colors.dart';
 import 'package:ieee_forms/services/user.dart';
+import 'package:ieee_forms/widgets/custom_button.dart';
 import 'package:ieee_forms/widgets/custom_dialog.dart';
 
 import '../auth/login_screen.dart';
@@ -20,10 +21,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return CustomScaffold(
         child: Container(
-            padding: const EdgeInsets.all(16.0),
-            color: Colors.white,
+          margin: const EdgeInsets.only(top: 40, bottom: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 30),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16)
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Align(
                   alignment: Alignment.center,
@@ -69,9 +75,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: Text(
-                      "Email Id: ${MyUser.currentUser.email}",
-                      style: const TextStyle(fontSize: 20),
+                    child: Flexible(
+                      child: Text(
+                        "Email Id: ${MyUser.currentUser.email}",
+                        style: const TextStyle(fontSize: 20),
+                      ),
                     )),
                 Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
@@ -88,32 +96,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       onPressed: () {},
                     )),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50)),
-                        minimumSize: const Size.fromHeight(50)),
-                    child: const Text('Logout'),
-                    onPressed: () {
-                      FirebaseAuth.instance.signOut();
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoginScreen()),
-                        (Route<dynamic> route) => false,
-                      );
-                    }),
-                Expanded(
+                customButton(context, 'Logout', () {
+                  FirebaseAuth.instance.signOut();
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const LoginScreen()),
+                      (Route<dynamic> route) => false,
+                );}),
+                const Expanded(
                   child: Align(
                       alignment: Alignment.bottomRight,
-                      child: SizedBox(
-                          width: 200,
-                          height: 250,
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(0),
-                              child: const Image(
-                                image: AssetImage("Assets/Profile_footer.png"),
-                              )))),
+                      child: Image(
+                        image: AssetImage("Assets/Profile_footer.png"),
+                      )),
                 ),
               ],
             )));

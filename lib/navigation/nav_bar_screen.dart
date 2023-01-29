@@ -17,7 +17,7 @@ class _NavBarScreenState extends State<NavBarScreen> {
   static final List<Widget> _list = <Widget>[
     const HomeScreen(),
     const NewFormScreen(),
-    ProfileScreen()
+    const ProfileScreen()
   ];
 
   void _onItemTapped(int index) {
