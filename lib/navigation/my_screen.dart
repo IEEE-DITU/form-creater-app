@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ieee_forms/auth/login_screen.dart';
 import 'package:ieee_forms/services/colors.dart';
 import 'package:ieee_forms/services/user.dart';
 import 'package:ieee_forms/widgets/custom_button.dart';
 import 'package:ieee_forms/widgets/custom_dialog.dart';
+import 'package:ieee_forms/widgets/custom_scaffold.dart';
 
-import '../auth/login_screen.dart';
-import '../widgets/custom_scaffold.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -21,12 +21,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return CustomScaffold(
         child: Container(
-          margin: const EdgeInsets.only(top: 40, bottom: 10),
+            margin: const EdgeInsets.only(top: 40, bottom: 10),
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 30),
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16)
-            ),
+                color: Colors.white, borderRadius: BorderRadius.circular(16)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -98,12 +96,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     )),
                 customButton(context, 'Logout', () {
                   FirebaseAuth.instance.signOut();
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const LoginScreen()),
-                      (Route<dynamic> route) => false,
-                );}),
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LoginScreen()),
+                    (Route<dynamic> route) => false,
+                  );
+                }),
                 const Expanded(
                   child: Align(
                       alignment: Alignment.bottomRight,
