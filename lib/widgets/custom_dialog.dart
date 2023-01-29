@@ -1,12 +1,15 @@
 import 'dart:io';
 import 'dart:ui' as ui;
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:ieee_forms/services/colors.dart';
+import 'package:ieee_forms/services/firebase_cloud.dart';
 import 'package:ieee_forms/services/form_data.dart';
+import 'package:ieee_forms/services/user.dart';
 import 'package:ieee_forms/widgets/snack_bar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -139,4 +142,113 @@ Future<void> writeToFile(ByteData data, String path) async {
   final buffer = data.buffer;
   await File(path)
       .writeAsBytes(buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
+}
+
+int currentlySelected = -1;
+List<String> imageList = [];
+
+Future<void> profileDialog(BuildContext context) {
+  currentlySelected = -1;
+  imageList = [];
+  return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+            title: const Text('Select Profile Image'),
+            content: const ImageWidget(),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'Cancel',
+                    style: TextStyle(color: CustomColors.disabledColor),
+                  )),
+              TextButton(
+                  onPressed: () async {
+                    debugPrint(currentlySelected.toString());
+                    FirebaseCloudService fireCloud = FirebaseCloudService();
+                    await fireCloud
+                        .updateProfilePic(imageList[currentlySelected]);
+
+                    //ignore:use_build_context_synchronously
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'Confirm',
+                    style: TextStyle(color: CustomColors.primaryColor),
+                  )),
+            ]);
+      });
+}
+
+class ImageWidget extends StatefulWidget {
+  const ImageWidget({Key? key}) : super(key: key);
+
+  @override
+  State<ImageWidget> createState() => _ImageWidgetState();
+}
+
+class _ImageWidgetState extends State<ImageWidget> {
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    getImageList();
+    super.initState();
+  }
+
+  Future<void> getImageList() async {
+    final storageRef = FirebaseStorage.instance.ref().child('Profile_Image');
+    ListResult result = await storageRef.listAll();
+    int i = 0;
+    for (Reference imageRef in result.items) {
+      final url = await imageRef.getDownloadURL();
+      if (url == MyUser.currentUser.profileImg) {
+        currentlySelected = i;
+      }
+      imageList.add(url);
+      i++;
+    }
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return (isLoading)
+        ? const Center(child: CircularProgressIndicator())
+        : SizedBox(
+            width: 160,
+            child: GridView.count(
+              shrinkWrap: true,
+              crossAxisCount: 2,
+              childAspectRatio: 1,
+              children: List.generate(imageList.length, (index) {
+                return Container(
+                  decoration: (currentlySelected == index)
+                      ? const BoxDecoration(color: CustomColors.primaryColor)
+                      : const BoxDecoration(),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                  height: 80,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        currentlySelected = index;
+                      });
+                    },
+                    child: Image.network(
+                      imageList[index],
+                      height: 80,
+                      width: 80,
+                    ),
+                  ),
+                );
+              }),
+            ),
+          );
+  }
 }

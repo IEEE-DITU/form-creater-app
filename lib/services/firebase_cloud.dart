@@ -13,7 +13,8 @@ class FirebaseCloudService {
       'name': username,
       'forms': [],
       'uid': uid,
-      'profileImg': 0
+      'profileImg':
+          'https://firebasestorage.googleapis.com/v0/b/ieee-custom-forms-181e4.appspot.com/o/Profile_Image%2Fprofile_0.png?alt=media&token=8ae071e4-e2f7-4b06-95a4-b0efb3b5c486'
     });
   }
 
@@ -102,7 +103,7 @@ class FirebaseCloudService {
         .doc(formID)
         .get()
         .then((DocumentSnapshot doc) {
-          allResponses = doc['responses'];
+      allResponses = doc['responses'];
     });
 
     FormData form = FormData(
@@ -138,5 +139,13 @@ class FirebaseCloudService {
       returnVal = value.docs.isNotEmpty;
     });
     return returnVal;
+  }
+
+  Future<void> updateProfilePic(String url) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(MyUser.currentUser.uid)
+        .update({'profileImg': url});
+    await MyUser.getCurrentUser();
   }
 }
