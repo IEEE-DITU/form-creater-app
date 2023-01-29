@@ -1,15 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ieee_forms/services/user.dart';
+import 'package:ieee_forms/widgets/custom_dialog.dart';
 
 import '../auth/login_screen.dart';
 import '../widgets/custom_scaffold.dart';
 
-class ProfileScreen extends StatelessWidget {
-  ProfileScreen({Key? key}) : super(key: key);
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({Key? key}) : super(key: key);
 
-  final user = FirebaseAuth.instance.currentUser!;
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
 
+class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -19,27 +23,29 @@ class ProfileScreen extends StatelessWidget {
             child: Column(
               children: [
                 Stack(children: [
-                  SizedBox(
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 20),
                     width: 200,
-                    height: 250,
+                    height: 200,
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(100),
-                        child: const Image(
-                          image: AssetImage("Assets/Avatar_img.png"),
+                        child: Image.network(
+                          MyUser.currentUser.profileImg,
                         )),
                   ),
                   Positioned(
-                    bottom: 60,
-                    right: 50,
-                    child: Container(
-                        width: 35,
-                        height: 35,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        child: const Icon(
-                          Icons.account_circle_rounded,
-                        )),
+                    bottom: 20,
+                    right: 20,
+                    child: IconButton(
+                      onPressed: () async {
+                        await profileDialog(context);
+                        setState(() {});
+                      },
+                      icon: const Icon(
+                        Icons.account_circle,
+                        size: 32,
+                      ),
+                    ),
                   ),
                 ]),
                 Align(
