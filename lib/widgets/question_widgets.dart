@@ -57,70 +57,68 @@ class _ChoiceTypeQuestionState extends State<ChoiceTypeQuestion> {
   Widget build(BuildContext context) {
     final currentQuestionOptions =
         FormData.currentForm.questions[widget.index]['options'];
-    return SizedBox(
-      height: currentQuestionOptions.length * 70.0 + 60,
-      child: ListView.builder(
-          physics: const ClampingScrollPhysics(),
-          itemCount: currentQuestionOptions.length,
-          itemBuilder: (context, ind) {
-            FocusNode focus = FocusNode();
-            focus.addListener(() {
-              if (focus.hasFocus == false &&
-                  currentQuestionOptions[ind] == '') {
-                setState(() {
-                  currentQuestionOptions.removeAt(ind);
-                });
-              }
-            });
-            return Column(
-              children: [
-                TextFormField(
-                    key: GlobalKey(),
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        prefix: Padding(
-                          padding: const EdgeInsets.only(left: 16, right: 8.0),
-                          child: Icon(
-                            (widget.type == 'single')
-                                ? Icons.circle_outlined
-                                : Icons.check_box_outlined,
-                            size: 16,
-                          ),
+    return ListView.builder(
+      shrinkWrap: true,
+        physics: const ClampingScrollPhysics(),
+        itemCount: currentQuestionOptions.length,
+        itemBuilder: (context, ind) {
+          FocusNode focus = FocusNode();
+          focus.addListener(() {
+            if (focus.hasFocus == false &&
+                currentQuestionOptions[ind] == '') {
+              setState(() {
+                currentQuestionOptions.removeAt(ind);
+              });
+            }
+          });
+          return Column(
+            children: [
+              TextFormField(
+                  key: GlobalKey(),
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      prefix: Padding(
+                        padding: const EdgeInsets.only(left: 16, right: 8.0),
+                        child: Icon(
+                          (widget.type == 'single')
+                              ? Icons.circle_outlined
+                              : Icons.check_box_outlined,
+                          size: 16,
                         ),
-                        errorStyle: const TextStyle(color: Colors.red)),
-                    onChanged: (value) {
-                      currentQuestionOptions[ind] = value;
-                      debugPrint(focus.hasFocus.toString());
-                    },
-                    focusNode: focus,
-                    onEditingComplete: () {
-                      if (currentQuestionOptions[ind] == '') {
-                        setState(() {
-                          currentQuestionOptions.removeAt(ind);
-                        });
-                      }
-                    },
-                    initialValue: currentQuestionOptions[ind]),
-                (ind == currentQuestionOptions.length - 1)
-                    ? Container(
-                        margin: const EdgeInsets.only(
-                            top: 10, bottom: 20, left: 16, right: 150),
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50)),
-                                minimumSize: const Size.fromHeight(30)),
-                            child: const Text('Add new Option'),
-                            onPressed: () {
-                              setState(() {
-                                currentQuestionOptions.add('New Option');
-                              });
-                            }))
-                    : const SizedBox(),
-              ],
-            );
-          }),
-    );
+                      ),
+                      errorStyle: const TextStyle(color: Colors.red)),
+                  onChanged: (value) {
+                    currentQuestionOptions[ind] = value;
+                    debugPrint(focus.hasFocus.toString());
+                  },
+                  focusNode: focus,
+                  onEditingComplete: () {
+                    if (currentQuestionOptions[ind] == '') {
+                      setState(() {
+                        currentQuestionOptions.removeAt(ind);
+                      });
+                    }
+                  },
+                  initialValue: currentQuestionOptions[ind]),
+              (ind == currentQuestionOptions.length - 1)
+                  ? Container(
+                      margin: const EdgeInsets.only(
+                          top: 10, bottom: 20, left: 16, right: 150),
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(50)),
+                              minimumSize: const Size.fromHeight(30)),
+                          child: const Text('Add new Option'),
+                          onPressed: () {
+                            setState(() {
+                              currentQuestionOptions.add('New Option');
+                            });
+                          }))
+                  : const SizedBox(),
+            ],
+          );
+        });
   }
 }
 

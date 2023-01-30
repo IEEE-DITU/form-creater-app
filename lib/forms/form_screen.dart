@@ -44,7 +44,7 @@ class _FormScreenState extends State<FormScreen> {
         : GestureDetector(
             onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
             child: Scaffold(
-                resizeToAvoidBottomInset: false,
+                resizeToAvoidBottomInset: true,
                 appBar: AppBar(
                   toolbarHeight: 70,
                   title: TextFormField(
@@ -77,14 +77,21 @@ class _FormScreenState extends State<FormScreen> {
                         child: const Icon(Icons.delete),
                         label: 'Delete Form',
                         onTap: () async {
-                          await fireCloud.deleteForm(widget.formId);
-                          // ignore: use_build_context_synchronously
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const NavBarScreen()),
-                            (Route<dynamic> route) => false,
-                          );
+                          customDialog(
+                              context,
+                              'Delete Form',
+                              const Text(
+                                  'All responses will be deleted along with the form data'),
+                              () async {
+                            await fireCloud.deleteForm(widget.formId);
+                            // ignore: use_build_context_synchronously
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const NavBarScreen()),
+                              (Route<dynamic> route) => false,
+                            );
+                          });
                         }),
                     SpeedDialChild(
                         child: const Icon(Icons.share),
@@ -109,7 +116,7 @@ class _FormScreenState extends State<FormScreen> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => const NavBarScreen()),
-                                  (Route<dynamic> route) => false,
+                              (Route<dynamic> route) => false,
                             );
                           });
                         }),
@@ -278,11 +285,7 @@ class _FormScreenState extends State<FormScreen> {
                                                   .length -
                                               1)
                                       ? Container(
-                                          margin: const EdgeInsets.only(
-                                              top: 20,
-                                              bottom: 50,
-                                              left: 16,
-                                              right: 16),
+                                          margin: const EdgeInsets.symmetric( vertical: 20, horizontal: 16),
                                           child: ElevatedButton(
                                               style: ElevatedButton.styleFrom(
                                                   shape: RoundedRectangleBorder(
