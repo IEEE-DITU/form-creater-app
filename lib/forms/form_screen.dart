@@ -4,7 +4,9 @@ import 'package:ieee_forms/forms/collaborator.dart';
 import 'package:ieee_forms/navigation/nav_bar_screen.dart';
 import 'package:ieee_forms/services/firebase_cloud.dart';
 import 'package:ieee_forms/services/questions.dart';
+import 'package:ieee_forms/widgets/custom_button.dart';
 import 'package:ieee_forms/widgets/custom_dialog.dart';
+import 'package:ieee_forms/widgets/custom_scaffold.dart';
 import 'package:ieee_forms/widgets/question_widgets.dart';
 import 'package:ieee_forms/widgets/snack_bar.dart';
 import 'package:ieee_forms/widgets/switch.dart';
@@ -43,8 +45,8 @@ class _FormScreenState extends State<FormScreen> {
         ? const CircularProgressIndicator()
         : GestureDetector(
             onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-            child: Scaffold(
-                resizeToAvoidBottomInset: false,
+            child: CustomScaffold(
+                resize: true,
                 appBar: AppBar(
                   toolbarHeight: 70,
                   title: TextFormField(
@@ -77,14 +79,21 @@ class _FormScreenState extends State<FormScreen> {
                         child: const Icon(Icons.delete),
                         label: 'Delete Form',
                         onTap: () async {
-                          await fireCloud.deleteForm(widget.formId);
-                          // ignore: use_build_context_synchronously
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const NavBarScreen()),
-                            (Route<dynamic> route) => false,
-                          );
+                          customDialog(
+                              context,
+                              'Delete Form',
+                              const Text(
+                                  'All responses will be deleted along with the form data'),
+                              () async {
+                            await fireCloud.deleteForm(widget.formId);
+                            // ignore: use_build_context_synchronously
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const NavBarScreen()),
+                              (Route<dynamic> route) => false,
+                            );
+                          });
                         }),
                     SpeedDialChild(
                         child: const Icon(Icons.share),
@@ -109,7 +118,7 @@ class _FormScreenState extends State<FormScreen> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => const NavBarScreen()),
-                                  (Route<dynamic> route) => false,
+                              (Route<dynamic> route) => false,
                             );
                           });
                         }),
@@ -125,192 +134,152 @@ class _FormScreenState extends State<FormScreen> {
                         })
                   ],
                 ),
-                body: Container(
-                  decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('Assets/Background.png'),
-                          fit: BoxFit.cover)),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: ListView.builder(
-                            itemCount: FormData.currentForm.questions.length,
-                            itemBuilder: (context, index) {
-                              final currentQuestion =
-                                  FormData.currentForm.questions[index];
-                              String questionType =
-                                  currentQuestion['questionType'];
-                              return Column(
-                                children: [
-                                  Container(
-                                    key: GlobalKey(),
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 16, vertical: 10),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 10),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15),
-                                        color: Colors.white),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                child: ListView(
+                  children: [
+                    ListView.builder(
+                        shrinkWrap: true,
+                        physics: const ClampingScrollPhysics(),
+                        itemCount: FormData.currentForm.questions.length,
+                        itemBuilder: (context, index) {
+                          final currentQuestion =
+                              FormData.currentForm.questions[index];
+                          String questionType =
+                              currentQuestion['questionType'];
+                          return Column(
+                            children: [
+                              Container(
+                                key: GlobalKey(),
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 10),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: Colors.white),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        child: IconButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                FormData.currentForm.questions
+                                                    .removeAt(index);
+                                              });
+                                            },
+                                            icon: const Icon(
+                                              Icons.close_outlined,
+                                              color: Colors.red,
+                                            )),
+                                      ),
+                                    ),
+                                    TextFormField(
+                                      decoration: InputDecoration(
+                                          prefix: Text('${index + 1}.  '),
+                                          border: InputBorder.none,
+                                          errorStyle: const TextStyle(
+                                              color: Colors.red)),
+                                      initialValue:
+                                          currentQuestion['questionTitle'],
+                                      onChanged: (val) {
+                                        currentQuestion['questionTitle'] =
+                                            val;
+                                      },
+                                      validator: (val) {
+                                        if (val == '') {
+                                          return 'Question Title cannot be empty';
+                                        }
+                                        return null;
+                                      },
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                    ),
+                                    (questionType == 'attachment')
+                                        ? AttachmentTypeQuestion(
+                                            index: index,
+                                          )
+                                        : (questionType == 'text')
+                                            ? TextTypeQuestion(index: index)
+                                            : (questionType == 'singleChoice')
+                                                ? ChoiceTypeQuestion(
+                                                    index: index,
+                                                    type: 'single')
+                                                : ChoiceTypeQuestion(
+                                                    index: index,
+                                                    type: 'multiple'),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Row(
                                           children: [
-                                            Expanded(
-                                              child: TextFormField(
-                                                decoration: InputDecoration(
-                                                    prefix:
-                                                        Text('${index + 1}.  '),
-                                                    border: InputBorder.none,
-                                                    errorStyle: const TextStyle(
-                                                        color: Colors.red)),
+                                            const Text('Required'),
+                                            FormSwitch(
                                                 initialValue: currentQuestion[
-                                                    'questionTitle'],
-                                                onChanged: (val) {
-                                                  currentQuestion[
-                                                      'questionTitle'] = val;
-                                                },
-                                                validator: (val) {
-                                                  if (val == '') {
-                                                    return 'Question Title cannot be empty';
-                                                  }
-                                                  return null;
-                                                },
-                                                autovalidateMode:
-                                                    AutovalidateMode
-                                                        .onUserInteraction,
-                                              ),
-                                            ),
-                                            Container(
-                                              margin:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10),
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10),
-                                              child: IconButton(
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      FormData
-                                                          .currentForm.questions
-                                                          .removeAt(index);
-                                                    });
-                                                  },
-                                                  icon: const Icon(
-                                                    Icons.delete,
-                                                    color: Colors.red,
-                                                  )),
-                                            ),
+                                                    'isRequired'],
+                                                questionIndex: index,
+                                                function: 'isRequired'),
                                           ],
                                         ),
-                                        (questionType == 'attachment')
-                                            ? AttachmentTypeQuestion(
-                                                index: index,
-                                              )
-                                            : (questionType == 'text')
-                                                ? TextTypeQuestion(index: index)
-                                                : (questionType ==
-                                                        'singleChoice')
-                                                    ? ChoiceTypeQuestion(
-                                                        index: index,
-                                                        type: 'single')
-                                                    : ChoiceTypeQuestion(
-                                                        index: index,
-                                                        type: 'multiple'),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                const Text('Required'),
-                                                FormSwitch(
-                                                    initialValue:
-                                                        currentQuestion[
-                                                            'isRequired'],
-                                                    questionIndex: index,
-                                                    function: 'isRequired'),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              .50,
+                                          child: DropdownButtonFormField(
+                                              value: questionType,
+                                              items: const [
+                                                DropdownMenuItem(
+                                                    value: 'text',
+                                                    child: Text('Text')),
+                                                DropdownMenuItem(
+                                                    value: 'singleChoice',
+                                                    child: Text(
+                                                        'Single Choice')),
+                                                DropdownMenuItem(
+                                                    value: 'multipleChoice',
+                                                    child: Text(
+                                                        'Multiple Choice')),
+                                                DropdownMenuItem(
+                                                    value: 'attachment',
+                                                    child: Text('Attachment'))
                                               ],
-                                            ),
-                                            Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10),
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  .50,
-                                              child: DropdownButtonFormField(
-                                                  value: questionType,
-                                                  items: const [
-                                                    DropdownMenuItem(
-                                                        value: 'text',
-                                                        child: Text('Text')),
-                                                    DropdownMenuItem(
-                                                        value: 'singleChoice',
-                                                        child: Text(
-                                                            'Single Choice')),
-                                                    DropdownMenuItem(
-                                                        value: 'multipleChoice',
-                                                        child: Text(
-                                                            'Multiple Choice')),
-                                                    DropdownMenuItem(
-                                                        value: 'attachment',
-                                                        child:
-                                                            Text('Attachment'))
-                                                  ],
-                                                  onChanged: (value) {
-                                                    currentQuestion[
-                                                        'questionType'] = value;
-                                                    setState(() {
-                                                      questionType = value!;
-                                                    });
-                                                  }),
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  (index ==
-                                          FormData.currentForm.questions
-                                                  .length -
-                                              1)
-                                      ? Container(
-                                          margin: const EdgeInsets.only(
-                                              top: 20,
-                                              bottom: 50,
-                                              left: 16,
-                                              right: 16),
-                                          child: ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50)),
-                                                  minimumSize:
-                                                      const Size.fromHeight(
-                                                          50)),
-                                              child: const Text(
-                                                  'Add new Questions'),
-                                              onPressed: () {
-                                                FormQuestions questions =
-                                                    FormQuestions();
+                                              onChanged: (value) {
+                                                currentQuestion[
+                                                    'questionType'] = value;
                                                 setState(() {
-                                                  FormData.currentForm.questions
-                                                      .add(questions
-                                                          .defaultTextTypeQuestion);
+                                                  questionType = value!;
                                                 });
                                               }),
-                                        )
-                                      : const SizedBox(),
-                                ],
-                              );
-                            }),
-                      ),
-                    ],
-                  ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
+                    SizedBox(
+                      width: (MediaQuery.of(context).size.width / 2),
+                      child: customButton(context, 'Add New Question', () {
+                        FormQuestions questions = FormQuestions();
+                        setState(() {
+                          FormData.currentForm.questions
+                              .add(questions.defaultTextTypeQuestion);
+                        });
+                      }),
+                    )
+                  ],
                 )),
           );
   }

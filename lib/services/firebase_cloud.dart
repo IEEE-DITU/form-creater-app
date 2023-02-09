@@ -14,7 +14,7 @@ class FirebaseCloudService {
       'forms': [],
       'uid': uid,
       'profileImg':
-          'https://firebasestorage.googleapis.com/v0/b/ieee-custom-forms-181e4.appspot.com/o/Profile_Image%2Fprofile_0.png?alt=media&token=8ae071e4-e2f7-4b06-95a4-b0efb3b5c486'
+    'https://firebasestorage.googleapis.com/v0/b/ieee-custom-forms-181e4.appspot.com/o/Profile_Image%2Fprofile_8.webp?alt=media&token=cc11e5d2-b5b4-43e6-b71f-e5c6231401bb'
     });
   }
 

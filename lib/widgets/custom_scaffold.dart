@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 
 class CustomScaffold extends StatelessWidget {
   const CustomScaffold(
-      {Key? key, this.appBar, required this.child, this.floatingActionButton})
+      {Key? key, this.appBar, required this.child, this.floatingActionButton, this.resize})
       : super(key: key);
   final PreferredSizeWidget? appBar;
   final Widget child;
   final Widget? floatingActionButton;
+  final bool? resize;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: appBar,
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: resize ?? false,
         floatingActionButton: floatingActionButton,
         body: GestureDetector(
           onTap: () => FocusManager.instance.primaryFocus?.unfocus(),

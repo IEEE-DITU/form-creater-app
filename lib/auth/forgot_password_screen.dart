@@ -74,13 +74,15 @@ class _PasswordScreenState extends State<PasswordScreen> {
               const SizedBox(
                 height: 50,
               ),
-              customButton('Get link on email', () {
-                FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-              }),
+              Center(
+                child: customButton(context, 'Get link on email', () {
+                  FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+                }),
+              ),
               const SizedBox(
                 height: 20,
               ),
-              customButton('Go back to Login', () => navigateLogin()),
+              Center(child: customButton(context, 'Go back to Login', () => navigateLogin())),
             ])));
   }
 }

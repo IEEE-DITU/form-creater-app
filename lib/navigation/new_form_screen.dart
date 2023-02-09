@@ -12,56 +12,93 @@ class NewFormScreen extends StatefulWidget {
 }
 
 class _NewFormScreenState extends State<NewFormScreen> {
-  //Disable button While processing
-  int maxclick = 1;
-  int counter = 1;
+  
   FirebaseCloudService fireCloud = FirebaseCloudService();
   String formTitle = "";
+  String formDescription = "";
+  String submit = "";
+
+  bool isLoading = false;
+  
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
       appBar: AppBar(
         title: const Text('Create New Form'),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Enter Form Title', style: TextStyle(fontSize: 18),),
-          TextFormField(
-            decoration: const InputDecoration(
-
-                hintText: " Enter Form Title",
-                labelText: "Title"),
-            onChanged: (value) {
-              formTitle = value;
-            },
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50)),
-                  minimumSize: const Size.fromHeight(50)),
-              onPressed: counter > maxclick
-                  ? null
-                  : () async {
-                      String formID = await fireCloud.createNewForm(
-                          formTitle, getCurrentDate(), '', '');
-                      setState(() {
-                        counter++;
-                      });
-                      //ignore:use_build_context_synchronously
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  FormScreen(formId: formID)));
-                    },
-              child: const Text('Add New Form'))
-        ],
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16)
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text('Enter Form Title', style: TextStyle(fontSize: 18),),
+            TextFormField(
+              decoration: const InputDecoration(
+                  hintText: " Enter Form Title",
+                  labelText: "Title"),
+              onChanged: (value) {
+                formTitle = value;
+              },
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Text('Enter Form Description', style: TextStyle(fontSize: 18),),
+            TextFormField(
+              decoration: const InputDecoration(
+                  hintText: " Enter Form Title",
+                  labelText: "Description"),
+              onChanged: (value) {
+                formTitle = value;
+              },
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Text('Enter Submit Description', style: TextStyle(fontSize: 18),),
+            TextFormField(
+              initialValue: 'Thank you for submitting your response. ',
+              decoration: const InputDecoration(
+                  hintText: " Enter Form Title",
+                  labelText: "Submit Description"),
+              onChanged: (value) {
+                formTitle = value;
+              },
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50)),
+                    minimumSize: const Size.fromHeight(50)),
+                onPressed: isLoading
+                    ? null
+                    : () async {
+                  setState(() {
+                    isLoading = true;
+                  });
+                        String formID = await fireCloud.createNewForm(
+                            formTitle, getCurrentDate(), '', '');
+                        setState(() {
+                          isLoading = false;
+                        });
+                        //ignore:use_build_context_synchronously
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    FormScreen(formId: formID)));
+                      },
+                child: (isLoading)? const CircularProgressIndicator() : const Text('Add New Form'))
+          ],
+        ),
       ),
     );
   }
