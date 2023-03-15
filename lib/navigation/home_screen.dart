@@ -1,6 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:ieee_forms/forms/form_screen.dart';
 import 'package:ieee_forms/forms/response_screen.dart';
+import 'package:ieee_forms/navigation/my_screen.dart';
+import 'package:ieee_forms/navigation/new_form_screen.dart';
 import 'package:ieee_forms/services/firebase_cloud.dart';
 import 'package:flutter/material.dart';
 import 'package:ieee_forms/services/user.dart';
@@ -38,6 +40,30 @@ class _HomeScreenState extends State<HomeScreen> {
     return CustomScaffold(
       appBar: AppBar(
         title: const Text('My forms'),
+        actions: [
+          IconButton(onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfileScreen()));
+          }, icon: Image.network(MyUser.currentUser.profileImg))
+        ],
+      ),
+      floatingActionButton: SizedBox(
+        height: 50,
+        width: 200,
+        child: FloatingActionButton(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20)
+          ),
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewFormScreen()));
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: const [
+              Text('Create New Form'),
+              Icon(Icons.create_outlined)
+            ],
+          ),
+        ),
       ),
       child: (isLoading)
           ? const CircularProgressIndicator()

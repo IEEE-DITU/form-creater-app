@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:ieee_forms/navigation/nav_bar_screen.dart';
+import 'package:ieee_forms/navigation/user_data_screen.dart';
 
 import 'login_screen.dart';
 
@@ -61,7 +61,7 @@ class _EmailVerifyScreenState extends State<EmailVerifyScreen> {
   @override
   Widget build(BuildContext context) {
     return (isEmailVerified)
-        ? const NavBarScreen()
+        ? const UserDataScreen()
         : Scaffold(
             body: Column(
               mainAxisAlignment: MainAxisAlignment.center,

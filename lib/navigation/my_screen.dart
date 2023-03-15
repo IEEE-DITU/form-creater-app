@@ -73,11 +73,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: Flexible(
-                      child: Text(
-                        "Email Id: ${MyUser.currentUser.email}",
-                        style: const TextStyle(fontSize: 20),
-                      ),
+                    child: Text(
+                      "Email Id: ${MyUser.currentUser.email}",
+                      style: const TextStyle(fontSize: 20),
                     )),
                 Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),

@@ -101,8 +101,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         suffixIcon: InkWell(
                           onTap: _togglePasswordView,
                           child: Icon(_isHidden
-                              ? Icons.visibility
-                              : Icons.visibility_off),
+                              ? Icons.visibility_off
+                              : Icons.visibility),
                         ),
                         hintText: " Enter your Password",
                         labelText: "Password"),
@@ -204,14 +204,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           });
                         }
                       }),
-                  const SizedBox(
-                    height: 60,
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: SignInButton(Buttons.Google, onPressed: () {
-                    }),
-                  )
                 ]),
           ),
         ),

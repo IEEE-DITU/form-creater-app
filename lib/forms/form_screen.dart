@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:ieee_forms/forms/collaborator.dart';
-import 'package:ieee_forms/navigation/nav_bar_screen.dart';
+import 'package:ieee_forms/navigation/user_data_screen.dart';
 import 'package:ieee_forms/services/firebase_cloud.dart';
 import 'package:ieee_forms/services/questions.dart';
 import 'package:ieee_forms/widgets/custom_button.dart';
@@ -90,7 +90,7 @@ class _FormScreenState extends State<FormScreen> {
                             Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const NavBarScreen()),
+                                  builder: (context) => const UserDataScreen()),
                               (Route<dynamic> route) => false,
                             );
                           });
@@ -117,7 +117,7 @@ class _FormScreenState extends State<FormScreen> {
                             Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const NavBarScreen()),
+                                  builder: (context) => const UserDataScreen()),
                               (Route<dynamic> route) => false,
                             );
                           });

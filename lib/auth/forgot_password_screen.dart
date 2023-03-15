@@ -56,7 +56,6 @@ class _PasswordScreenState extends State<PasswordScreen> {
               ),
               TextFormField(
                 decoration: const InputDecoration(
-                  hintText: 'Email',
                   labelText: 'Enter your Registered Email',
                 ),
                 initialValue: email,
@@ -77,12 +76,10 @@ class _PasswordScreenState extends State<PasswordScreen> {
               Center(
                 child: customButton(context, 'Get link on email', () {
                   FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Reset link sent on the email')));
+                  navigateLogin();
                 }),
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              Center(child: customButton(context, 'Go back to Login', () => navigateLogin())),
             ])));
   }
 }
